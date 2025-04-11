@@ -1,12 +1,15 @@
 package pt.arnaldocanelas.projetoapi.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -19,6 +22,9 @@ public class User implements Serializable {
 	private Long id;
 	private String name;
 	private Integer age;
+	
+	@OneToMany(mappedBy = "holder")
+	private List<Account> accounts = new ArrayList<>();
 
 	public User() {}
 	
@@ -51,6 +57,10 @@ public class User implements Serializable {
 	public void setAge(Integer age) {
 		this.age = age;
 	}
+	
+	public List<Account> getAccounts() {
+		return accounts;
+	}	
 	
 	@Override
 	public int hashCode() {

@@ -7,6 +7,8 @@ import java.util.Objects;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -16,6 +18,9 @@ public class Account implements Serializable {
 	
 	@Id
 	private Long number;
+	
+	@ManyToOne
+	@JoinColumn(name = "holder_id")
 	private User holder;
 	private Double balance;
 	
