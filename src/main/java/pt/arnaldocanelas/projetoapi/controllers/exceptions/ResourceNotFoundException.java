@@ -1,4 +1,4 @@
-package pt.arnaldocanelas.projetoapi.exceptions;
+package pt.arnaldocanelas.projetoapi.controllers.exceptions;
 
 public class ResourceNotFoundException extends RuntimeException{
 	private static final long serialVersionUID = 1L;

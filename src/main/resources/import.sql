@@ -20,4 +20,4 @@ INSERT INTO tb_account (number, holder_id, balance, creationdate) VALUES (100000
 INSERT INTO tb_account (number, holder_id, balance, creationdate) VALUES (1000000007, 7, 742.30, '2023-04-18');
 INSERT INTO tb_account (number, holder_id, balance, creationdate) VALUES (1000000008, 5, 85.75, '2024-01-25');
 INSERT INTO tb_account (number, holder_id, balance, creationdate) VALUES (1000000009, 9, 3210.90, '2022-07-14');
-INSERT INTO tb_account (number, holder_id, balance, creationdate) VALUES (1000000010, 1, 110.00, '2023-10-30');
+INSERT INTO tb_account (number, holder_id, balance, creationdate) VALUES (1000000010, 1, 110.00, '2023-10-30'); 

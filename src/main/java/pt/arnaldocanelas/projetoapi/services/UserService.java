@@ -5,9 +5,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import pt.arnaldocanelas.projetoapi.controllers.exceptions.ResourceNotFoundException;
 import pt.arnaldocanelas.projetoapi.dto.UserDTO;
 import pt.arnaldocanelas.projetoapi.entities.User;
-import pt.arnaldocanelas.projetoapi.exceptions.ResourceNotFoundException;
 import pt.arnaldocanelas.projetoapi.repositories.UserRepository;
 
 @Service
