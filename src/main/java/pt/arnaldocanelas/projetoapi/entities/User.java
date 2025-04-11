@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,7 +26,8 @@ public class User implements Serializable {
 	private String name;
 	private Integer age;
 	
-	@OneToMany(mappedBy = "holder")
+	@JsonIgnore  // Ignora a coleção de roles durante a serialização
+	@OneToMany(mappedBy = "holder", fetch = FetchType.LAZY)
 	private List<Account> accounts = new ArrayList<>();
 
 	public User() {}

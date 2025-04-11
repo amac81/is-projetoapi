@@ -1,5 +1,9 @@
 package pt.arnaldocanelas.projetoapi.dto;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import pt.arnaldocanelas.projetoapi.entities.Account;
 import pt.arnaldocanelas.projetoapi.entities.User;
 
 public class UserDTO {
@@ -7,6 +11,7 @@ public class UserDTO {
     private Long id;
     private String name;
     private Integer age;
+    private List<AccountDTO> accounts = new ArrayList<>();
 
     public UserDTO(Long id, String name, Integer age) {
         this.id = id;
@@ -18,6 +23,10 @@ public class UserDTO {
         this.id = entity.getId();
         this.name = entity.getName();
         this.age = entity.getAge();
+        
+        for(Account account : entity.getAccounts()) {
+			accounts.add(new AccountDTO(account));
+		}
     }
 
     public Long getId() {
@@ -31,4 +40,8 @@ public class UserDTO {
      public Integer getAge() {
         return age;
     }
+     
+ 	public List<AccountDTO> getAccounts() {
+		return accounts;
+	}
  }
