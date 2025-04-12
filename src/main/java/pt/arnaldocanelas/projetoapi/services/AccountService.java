@@ -98,7 +98,7 @@ public class AccountService<T> {
 		try 
 		{
 			repository.deleteById(id);
-		}
+		}	
 		catch (DataIntegrityViolationException e) 
 		{
         	throw new DatabaseException("Falha de integridade referencial");
