@@ -26,7 +26,7 @@ public class User implements Serializable {
 	private String name;
 	private Integer age;
 	
-	@JsonIgnore  // Ignora a coleção de roles durante a serialização
+	@JsonIgnore  // Ignora a coleção de accounts durante a serialização
 	@OneToMany(mappedBy = "holder", fetch = FetchType.LAZY)
 	private List<Account> accounts = new ArrayList<>();
 
