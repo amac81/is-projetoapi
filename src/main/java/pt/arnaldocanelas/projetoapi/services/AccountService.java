@@ -50,7 +50,7 @@ public class AccountService<T> {
 		
 		Account entity = new Account(); 
 		
-		entity.setNumber(dto.getNumber());
+		entity.setId(dto.getId());
 		entity.setHolder(dto.getHolder());
 		entity.setBalance(dto.getBalance());
 		
@@ -60,7 +60,7 @@ public class AccountService<T> {
 		
 		entity.setCreationDate(dataAtual);
 		
-		if (repository.existsById(entity.getNumber())) {
+		if (repository.existsById(entity.getId())) {
 			throw new DatabaseException("Conta já existe");
 		}
 		
@@ -77,7 +77,7 @@ public class AccountService<T> {
 			Account entity = repository.getReferenceById(id); 
 			
 			entity.setHolder(dto.getHolder());
-			entity.setNumber(dto.getNumber());
+			entity.setId(dto.getId());
 			entity.setCreationDate(dto.getCreationDate());
 					
 			entity = repository.save(entity);
@@ -90,14 +90,14 @@ public class AccountService<T> {
 	}
 	
 	@Transactional(propagation = Propagation.SUPPORTS)
-	public void deleteById(Long number) {
-		if(!repository.existsById(number)) 
+	public void deleteById(Long id) {
+		if(!repository.existsById(id)) 
 		{
 			throw new ResourceNotFoundException("Recurso não encontrado");
 		}
 		try 
 		{
-			repository.deleteById(number);
+			repository.deleteById(id);
 		}
 		catch (DataIntegrityViolationException e) 
 		{

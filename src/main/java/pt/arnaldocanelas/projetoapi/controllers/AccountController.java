@@ -47,7 +47,7 @@ public class AccountController {
 		
 		//to generate the correct HTTP response code 201 - Created
 		//good programming practice Post 
-		URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/{id}").buildAndExpand(dto.getNumber())
+		URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/{id}").buildAndExpand(dto.getId())
 				.toUri();
 		
 		return ResponseEntity.created(uri).body(dto);

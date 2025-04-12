@@ -14,16 +14,12 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name="tb_account")
-@AttributeOverride(
-	    name = "id",
-	    column = @Column(name = "number")
-)
 public class Account implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@Column(unique = true)
-	private Long number;
+	@Column(unique = true, name = "acountnumber")
+	private Long id;
 	
 	@ManyToOne
 	@JoinColumn(name = "holder_id")
@@ -37,19 +33,19 @@ public class Account implements Serializable {
 	public Account() {
 	}
 	
-	public Account(Long number, User holder, Double balance, LocalDate creationDate) {
-		this.number = number;
+	public Account(Long id, User holder, Double balance, LocalDate creationDate) {
+		this.id = id;
 		this.holder = holder;
 		this.balance = balance;
 		this.creationDate = creationDate;
 	}
 	
-	public Long getNumber() {
-		return number;
+	public Long getId() {
+		return id;
 	}
 
-	public void setNumber(Long number) {
-		this.number = number;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public User getHolder() {
@@ -78,7 +74,7 @@ public class Account implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(number);
+		return Objects.hash(id);
 	}
 
 	@Override
@@ -90,7 +86,7 @@ public class Account implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Account other = (Account) obj;
-		return Objects.equals(number, other.number);
+		return Objects.equals(id, other.id);
 	}
 	
 }
