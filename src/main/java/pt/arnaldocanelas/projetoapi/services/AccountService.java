@@ -50,13 +50,19 @@ public class AccountService<T> {
 		
 		Account entity = new Account(); 
 		
-		entity.setHolder(dto.getHolder());
 		entity.setNumber(dto.getNumber());
+		entity.setHolder(dto.getHolder());
+		entity.setBalance(dto.getBalance());
+		
 		
 		ZoneId fusoHorario = ZoneId.systemDefault(); // ou por exemplo: ZoneId.of("Europe/Lisbon")
         LocalDate dataAtual = Instant.now().atZone(fusoHorario).toLocalDate();
 		
 		entity.setCreationDate(dataAtual);
+		
+		if (repository.existsById(entity.getNumber())) {
+			throw new DatabaseException("Conta já existe");
+		}
 		
 		entity = repository.save(entity);
 			
@@ -84,14 +90,14 @@ public class AccountService<T> {
 	}
 	
 	@Transactional(propagation = Propagation.SUPPORTS)
-	public void deleteById(Long id) {
-		if(!repository.existsById(id)) 
+	public void deleteById(Long number) {
+		if(!repository.existsById(number)) 
 		{
 			throw new ResourceNotFoundException("Recurso não encontrado");
 		}
 		try 
 		{
-			repository.deleteById(id);
+			repository.deleteById(number);
 		}
 		catch (DataIntegrityViolationException e) 
 		{

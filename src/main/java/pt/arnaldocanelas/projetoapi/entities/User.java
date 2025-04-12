@@ -32,7 +32,7 @@ public class User implements Serializable {
 
 	public User() {}
 	
-	public User(Long id, String name, String cpf,Integer age) {
+	public User(Long id, String name, Integer age) {
 		this.id = id;
 		this.name = name;
 		this.age = age;

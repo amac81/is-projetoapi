@@ -2,16 +2,24 @@ package pt.arnaldocanelas.projetoapi.dto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import pt.arnaldocanelas.projetoapi.entities.Account;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import pt.arnaldocanelas.projetoapi.entities.User;
 
 public class UserDTO {
     
     private Long id;
+    
+    @NotBlank(message = "Campo necessário")
     private String name;
+    @Positive(message = "Idade tem de ser um valor positivo")
     private Integer age;
+    
     private List<AccountDTO> accounts = new ArrayList<>();
+
+    public UserDTO() {}
 
     public UserDTO(Long id, String name, Integer age) {
         this.id = id;
@@ -24,9 +32,7 @@ public class UserDTO {
         this.name = entity.getName();
         this.age = entity.getAge();
         
-        for(Account account : entity.getAccounts()) {
-			accounts.add(new AccountDTO(account));
-		}
+        accounts = entity.getAccounts().stream().map(x->new AccountDTO(x)).collect(Collectors.toList());
     }
 
     public Long getId() {
@@ -55,6 +61,11 @@ public class UserDTO {
 
 	public void setAge(Integer age) {
 		this.age = age;
+	}
+
+	@Override
+	public String toString() {
+		return "UserDTO [id=" + id + ", name=" + name + ", age=" + age + ", accounts=" + accounts + "]";
 	}
  	
  	
