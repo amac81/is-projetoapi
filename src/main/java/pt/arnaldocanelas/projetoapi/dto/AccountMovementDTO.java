@@ -76,4 +76,12 @@ public class AccountMovementDTO {
 		this.moment = moment;
 	}
 
+	@Override
+	public String toString() {
+		return "AccountMovementDTO [id=" + id + ", amount=" + amount + ", originAccount=" + originAccount
+				+ ", destinationAccount=" + destinationAccount + ", type=" + type + ", moment=" + moment + "]";
+	}
+	
+	
+
 }

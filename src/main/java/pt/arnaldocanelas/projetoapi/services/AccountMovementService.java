@@ -50,7 +50,9 @@ public class AccountMovementService<T> {
 		copyDtoToEntity(dto, entity);
 			
 		entity.setMoment(Instant.now());
-	
+		
+		System.out.println(dto);
+		
 		entity = repository.save(entity);
 			
 		return new AccountMovementDTO(entity);
@@ -75,12 +77,12 @@ public class AccountMovementService<T> {
 	}
 	
 	private void copyDtoToEntity(AccountMovementDTO dto, AccountMovement entity) {
-		dto.setId(entity.getId());
-		dto.setOriginAccount(entity.getOriginAccount());
-		dto.setDestinationAccount(entity.getDestinationAccount());
-		dto.setAmount(entity.getAmount());
-		dto.setType(entity.getType());
-		dto.setMoment(entity.getMoment());
+		entity.setId(dto.getId());
+		entity.setOriginAccount(dto.getOriginAccount());
+		entity.setDestinationAccount(dto.getDestinationAccount());
+		entity.setAmount(dto.getAmount());
+		entity.setType(dto.getType());
+		entity.setMoment(dto.getMoment());
 	}
 	
 	@Transactional(propagation = Propagation.SUPPORTS)

@@ -6,6 +6,8 @@ import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -23,6 +25,8 @@ public class AccountMovement implements Serializable {
 	private Double amount;
 	private Account originAccount;
 	private Account destinationAccount;
+	
+	@Enumerated(EnumType.STRING)
 	private MovementType type;
 	
 	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")//UTC
