@@ -11,8 +11,7 @@ public class AccountMovementDTO {
 
 	private Long id;
 	private Double amount;
-	private Account originAccount;
-	private Account destinationAccount;
+	private Account account;
 	private MovementType type;
 	
 	private Instant moment;
@@ -22,8 +21,7 @@ public class AccountMovementDTO {
 	public AccountMovementDTO(AccountMovement entity) {
 		this.id = entity.getId();
 		this.amount = entity.getAmount();
-		this.originAccount = entity.getOriginAccount();
-		this.destinationAccount = entity.getDestinationAccount();
+		this.account = entity.getAccount();
 		this.type = entity.getType();
 		this.moment = entity.getMoment();
     }
@@ -44,20 +42,12 @@ public class AccountMovementDTO {
 		this.amount = amount;
 	}
 
-	public Account getOriginAccount() {
-		return originAccount;
+	public Account getAccount() {
+		return account;
 	}
 
-	public void setOriginAccount(Account originAccount) {
-		this.originAccount = originAccount;
-	}
-
-	public Account getDestinationAccount() {
-		return destinationAccount;
-	}
-
-	public void setDestinationAccount(Account destinationAccount) {
-		this.destinationAccount = destinationAccount;
+	public void setAccount(Account account) {
+		this.account = account;
 	}
 
 	public MovementType getType() {
@@ -78,10 +68,8 @@ public class AccountMovementDTO {
 
 	@Override
 	public String toString() {
-		return "AccountMovementDTO [id=" + id + ", amount=" + amount + ", originAccount=" + originAccount
-				+ ", destinationAccount=" + destinationAccount + ", type=" + type + ", moment=" + moment + "]";
+		return "AccountMovementDTO [id=" + id + ", amount=" + amount + ", account=" + account + ", type=" + type
+				+ ", moment=" + moment + "]";
 	}
-	
-	
 
 }

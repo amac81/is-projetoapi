@@ -16,16 +16,20 @@ import pt.arnaldocanelas.projetoapi.controllers.exceptions.ResourceNotFoundExcep
 import pt.arnaldocanelas.projetoapi.dto.AccountMovementDTO;
 import pt.arnaldocanelas.projetoapi.entities.AccountMovement;
 import pt.arnaldocanelas.projetoapi.repositories.AccountMovementRepository;
+import pt.arnaldocanelas.projetoapi.repositories.AccountRepository;
 
 @Service
 public class AccountMovementService<T> {
 
 	@Autowired
-	private AccountMovementRepository repository;
+	private AccountMovementRepository accountMovementRepository;
+	
+	@Autowired
+	private AccountRepository accountRepository;
 	
 	@Transactional(readOnly = true)
 	public AccountMovementDTO findById(Long id) {
-		Optional<AccountMovement> result = repository.findById(id);
+		Optional<AccountMovement> result = accountMovementRepository.findById(id);
 		AccountMovement entity = result.orElseThrow(
 				()-> new ResourceNotFoundException("Recurso não encontrado"));
 
@@ -35,7 +39,7 @@ public class AccountMovementService<T> {
 	@Transactional(readOnly = true)
 	public Page<AccountMovementDTO> findAll(Pageable pageable) {
 		
-		Page<AccountMovement> result = repository.findAll(pageable);
+		Page<AccountMovement> result = accountMovementRepository.findAll(pageable);
 		
 		//with lambda expression
 		return result.map(x -> new AccountMovementDTO(x));
@@ -53,7 +57,7 @@ public class AccountMovementService<T> {
 		
 		System.out.println(dto);
 		
-		entity = repository.save(entity);
+		entity = accountMovementRepository.save(entity);
 			
 		return new AccountMovementDTO(entity);
 	}
@@ -63,11 +67,11 @@ public class AccountMovementService<T> {
 		try 
 		{
 			//does not go to the database; object monitored by JPA
-			AccountMovement entity = repository.getReferenceById(id); 
+			AccountMovement entity = accountMovementRepository.getReferenceById(id); 
 			
 			copyDtoToEntity(dto, entity);
 					
-			entity = repository.save(entity);
+			entity = accountMovementRepository.save(entity);
 			
 			return new AccountMovementDTO(entity);
 		}catch(EntityNotFoundException e) {
@@ -78,8 +82,9 @@ public class AccountMovementService<T> {
 	
 	private void copyDtoToEntity(AccountMovementDTO dto, AccountMovement entity) {
 		entity.setId(dto.getId());
-		entity.setOriginAccount(dto.getOriginAccount());
-		entity.setDestinationAccount(dto.getDestinationAccount());
+		
+		entity.setAccount(dto.getAccount());
+		
 		entity.setAmount(dto.getAmount());
 		entity.setType(dto.getType());
 		entity.setMoment(dto.getMoment());
@@ -87,13 +92,13 @@ public class AccountMovementService<T> {
 	
 	@Transactional(propagation = Propagation.SUPPORTS)
 	public void deleteById(Long id) {
-		if(!repository.existsById(id)) 
+		if(!accountMovementRepository.existsById(id)) 
 		{
 			throw new ResourceNotFoundException("Recurso não encontrado");
 		}
 		try 
 		{
-			repository.deleteById(id);
+			accountMovementRepository.deleteById(id);
 		}	
 		catch (DataIntegrityViolationException e) 
 		{

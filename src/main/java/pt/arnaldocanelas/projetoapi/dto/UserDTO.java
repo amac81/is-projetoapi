@@ -17,8 +17,7 @@ public class UserDTO {
     @Positive(message = "Idade tem de ser um valor positivo")
     private Integer age;
     private String nif;
-    
-    
+     
     private List<AccountDTO> accounts = new ArrayList<>();
 
     public UserDTO() {}

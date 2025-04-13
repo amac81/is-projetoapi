@@ -11,6 +11,8 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import pt.arnaldocanelas.projetoapi.entities.enums.MovementType;
 
@@ -23,8 +25,10 @@ public class AccountMovement implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private Double amount;
-	private Account originAccount;
-	private Account destinationAccount;
+	
+	@ManyToOne
+	@JoinColumn(name = "accountnumber")
+	private Account account;
 	
 	@Enumerated(EnumType.STRING)
 	private MovementType type;
@@ -34,12 +38,10 @@ public class AccountMovement implements Serializable {
 
 	public AccountMovement() {}
 	
-	public AccountMovement(Long id, Double amount, Account originAccount, Account destinationAccount,
-			MovementType type, Instant moment) {
+	public AccountMovement(Long id, Double amount, Account account, MovementType type, Instant moment) {
 		this.id = id;
 		this.amount = amount;
-		this.originAccount = originAccount;
-		this.destinationAccount = destinationAccount;
+		this.account = account;
 		this.type = type;
 		this.moment = moment;
 	}
@@ -60,20 +62,12 @@ public class AccountMovement implements Serializable {
 		this.amount = amount;
 	}
 	
-	public Account getOriginAccount() {
-		return originAccount;
+	public Account getAccount() {
+		return account;
 	}
 
-	public void setOriginAccount(Account originAccount) {
-		this.originAccount = originAccount;
-	}
-
-	public Account getDestinationAccount() {
-		return destinationAccount;
-	}
-
-	public void setDestinationAccount(Account destinationAccount) {
-		this.destinationAccount = destinationAccount;
+	public void setAccount(Account account) {
+		this.account = account;
 	}
 
 	public MovementType getType() {
@@ -111,8 +105,7 @@ public class AccountMovement implements Serializable {
 
 	@Override
 	public String toString() {
-		return "BankingMovement [id=" + id + ", amount=" + amount + ", originAccount=" + originAccount
-				+ ", destinationAccount=" + destinationAccount + ", type=" + type
+		return "AccountMovement [id=" + id + ", amount=" + amount + ", account=" + account + ", type=" + type
 				+ ", moment=" + moment + "]";
 	}
 

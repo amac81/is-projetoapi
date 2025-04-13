@@ -11,37 +11,38 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import jakarta.servlet.http.HttpServletRequest;
-import pt.arnaldocanelas.projetoapi.controllers.exceptions.DatabaseException;
 import pt.arnaldocanelas.projetoapi.controllers.exceptions.ResourceNotFoundException;
-import pt.arnaldocanelas.projetoapi.dto.CustomError;
-import pt.arnaldocanelas.projetoapi.dto.ValidationError;
+import pt.arnaldocanelas.projetoapi.dto.CustomErrorDTO;
+import pt.arnaldocanelas.projetoapi.dto.ValidationErrorDTO;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
 	
-	@ExceptionHandler(ResourceNotFoundException.class)
-	public ResponseEntity<CustomError> resourceNotFound(ResourceNotFoundException e, HttpServletRequest request) 
+
+	@ExceptionHandler(HttpMessageNotReadableException.class)
+	public ResponseEntity<CustomErrorDTO> jsonParse(HttpMessageNotReadableException e, HttpServletRequest request) 
 	{
-		HttpStatus status = HttpStatus.NOT_FOUND;
-		CustomError err = new CustomError(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
+		HttpStatus status = HttpStatus.UNPROCESSABLE_ENTITY;
+		CustomErrorDTO err = new CustomErrorDTO(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
 		
 		return ResponseEntity.status(status).body(err);
-	}
+	}	
 	
-	@ExceptionHandler(DatabaseException.class)
-	public ResponseEntity<CustomError> database(DatabaseException e, HttpServletRequest request) 
+
+	@ExceptionHandler(ResourceNotFoundException.class)
+	public ResponseEntity<CustomErrorDTO> resourceNotFound(ResourceNotFoundException e, HttpServletRequest request) 
 	{
-		HttpStatus status = HttpStatus.BAD_REQUEST;
-		CustomError err = new CustomError(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
+		HttpStatus status = HttpStatus.NOT_FOUND;
+		CustomErrorDTO err = new CustomErrorDTO(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
 		
 		return ResponseEntity.status(status).body(err);
 	}
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity<CustomError> validation(MethodArgumentNotValidException e, HttpServletRequest request) 
+	public ResponseEntity<CustomErrorDTO> validation(MethodArgumentNotValidException e, HttpServletRequest request) 
 	{
 		HttpStatus status = HttpStatus.UNPROCESSABLE_ENTITY;
-		ValidationError err = new ValidationError(Instant.now(), status.value(), "Dados inválidos", request.getRequestURI());
+		ValidationErrorDTO err = new ValidationErrorDTO(Instant.now(), status.value(), "Dados inválidos", request.getRequestURI());
 		
 		for(FieldError f : e.getBindingResult().getFieldErrors()) {
 			err.addError(f.getField(), f.getDefaultMessage());
@@ -50,12 +51,4 @@ public class ControllerExceptionHandler {
 		return ResponseEntity.status(status).body(err);
 	}
 	
-	@ExceptionHandler(HttpMessageNotReadableException.class)
-	public ResponseEntity<CustomError> jsonParse(HttpMessageNotReadableException e, HttpServletRequest request) 
-	{
-		HttpStatus status = HttpStatus.UNPROCESSABLE_ENTITY;
-		CustomError err = new CustomError(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
-		
-		return ResponseEntity.status(status).body(err);
-	}	
 }
