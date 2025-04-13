@@ -17,6 +17,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import jakarta.validation.Valid;
 import pt.arnaldocanelas.projetoapi.dto.AccountMovementDTO;
+import pt.arnaldocanelas.projetoapi.dto.AccountMovementMinDTO;
 import pt.arnaldocanelas.projetoapi.entities.AccountMovement;
 import pt.arnaldocanelas.projetoapi.services.AccountMovementService;
 
@@ -28,14 +29,14 @@ public class AccountMovementController {
 	private AccountMovementService<AccountMovement> service;
 	
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<AccountMovementDTO> findById(@PathVariable Long id) {
-		AccountMovementDTO dto = service.findById(id);
+	public ResponseEntity<AccountMovementMinDTO> findById(@PathVariable Long id) {
+		AccountMovementMinDTO dto = service.findById(id);
 		return ResponseEntity.ok(dto);
 	}
 	
 	@GetMapping
-	public ResponseEntity<Page<AccountMovementDTO>> getAll(Pageable pageable) {
-		Page<AccountMovementDTO> page = service.findAll(pageable); 
+	public ResponseEntity<Page<AccountMovementMinDTO>> getAll(Pageable pageable) {
+		Page<AccountMovementMinDTO> page = service.findAll(pageable); 
 		
 		return ResponseEntity.ok(page);
 	}

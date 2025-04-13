@@ -14,6 +14,7 @@ import jakarta.persistence.EntityNotFoundException;
 import pt.arnaldocanelas.projetoapi.controllers.exceptions.DatabaseException;
 import pt.arnaldocanelas.projetoapi.controllers.exceptions.ResourceNotFoundException;
 import pt.arnaldocanelas.projetoapi.dto.AccountMovementDTO;
+import pt.arnaldocanelas.projetoapi.dto.AccountMovementMinDTO;
 import pt.arnaldocanelas.projetoapi.entities.AccountMovement;
 import pt.arnaldocanelas.projetoapi.repositories.AccountMovementRepository;
 
@@ -24,21 +25,21 @@ public class AccountMovementService<T> {
 	private AccountMovementRepository accountMovementRepository;
 	
 	@Transactional(readOnly = true)
-	public AccountMovementDTO findById(Long id) {
+	public AccountMovementMinDTO findById(Long id) {
 		Optional<AccountMovement> result = accountMovementRepository.findById(id);
 		AccountMovement entity = result.orElseThrow(
 				()-> new ResourceNotFoundException("Recurso não encontrado"));
 
-		return new AccountMovementDTO(entity);
+		return new AccountMovementMinDTO(entity);
 	}
 	
 	@Transactional(readOnly = true)
-	public Page<AccountMovementDTO> findAll(Pageable pageable) {
+	public Page<AccountMovementMinDTO> findAll(Pageable pageable) {
 		
 		Page<AccountMovement> result = accountMovementRepository.findAll(pageable);
 		
 		//with lambda expression
-		return result.map(x -> new AccountMovementDTO(x));
+		return result.map(x -> new AccountMovementMinDTO(x));
 	}
 	
 	
