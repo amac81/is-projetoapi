@@ -14,7 +14,7 @@ import jakarta.persistence.EntityNotFoundException;
 import pt.arnaldocanelas.projetoapi.controllers.exceptions.DatabaseException;
 import pt.arnaldocanelas.projetoapi.controllers.exceptions.ResourceNotFoundException;
 import pt.arnaldocanelas.projetoapi.dto.AccountMovementDTO;
-import pt.arnaldocanelas.projetoapi.dto.AccountMovementMinDTO;
+import pt.arnaldocanelas.projetoapi.dto.AccountMovementReportDTO;
 import pt.arnaldocanelas.projetoapi.entities.AccountMovement;
 import pt.arnaldocanelas.projetoapi.repositories.AccountMovementRepository;
 
@@ -25,38 +25,46 @@ public class AccountMovementService<T> {
 	private AccountMovementRepository accountMovementRepository;
 	
 	@Transactional(readOnly = true)
-	public AccountMovementMinDTO findById(Long id) {
+	public AccountMovementDTO findById(Long id) {
 		Optional<AccountMovement> result = accountMovementRepository.findById(id);
 		AccountMovement entity = result.orElseThrow(
 				()-> new ResourceNotFoundException("Recurso não encontrado"));
 
-		return new AccountMovementMinDTO(entity);
+		return new AccountMovementDTO(entity);
 	}
 	
 	@Transactional(readOnly = true)
-	public Page<AccountMovementMinDTO> findAll(Pageable pageable) {
+	public Page<AccountMovementDTO> findAll(Pageable pageable) {
 		
 		Page<AccountMovement> result = accountMovementRepository.findAll(pageable);
 		
 		//with lambda expression
-		return result.map(x -> new AccountMovementMinDTO(x));
+		return result.map(x -> new AccountMovementDTO(x));
 	}
 	
 	
 	@Transactional
-	public AccountMovementDTO insert(AccountMovementDTO dto) {
+	public AccountMovementReportDTO insert(AccountMovementDTO dto) {
+		
+		//Testar se é possível
+		
+		//TODO Identificar tipo de movimento
+		//Registar movimentos das duas contas
+		//e atualizar os saldos
 
-		AccountMovement entity = new AccountMovement(); 
+		AccountMovement originAccountMovement = new AccountMovement(); 
+		AccountMovement destinationAccountMovement = new AccountMovement();
 		
-		copyDtoToEntity(dto, entity);
+		copyDtoToEntity(dto, originAccountMovement);
+		copyDtoToEntity(dto, destinationAccountMovement);
 			
-		entity.setMoment(Instant.now());
+		originAccountMovement.setMoment(Instant.now());
+		destinationAccountMovement.setMoment(Instant.now());
 		
-		System.out.println(dto);
-		
-		entity = accountMovementRepository.save(entity);
+		originAccountMovement = accountMovementRepository.save(originAccountMovement);
+		destinationAccountMovement = accountMovementRepository.save(destinationAccountMovement);
 			
-		return new AccountMovementDTO(entity);
+		return new AccountMovementReportDTO(originAccountMovement, destinationAccountMovement);
 	}
 	
 	@Transactional
@@ -80,7 +88,8 @@ public class AccountMovementService<T> {
 	private void copyDtoToEntity(AccountMovementDTO dto, AccountMovement entity) {
 		entity.setId(dto.getId());
 		
-		entity.setAccount(dto.getAccount());
+		entity.setOriginAccountId(dto.getOriginAccountId());	
+		entity.setDestinationAccountId(dto.getDestinationAccountId());
 		
 		entity.setAmount(dto.getAmount());
 		entity.setType(dto.getType());

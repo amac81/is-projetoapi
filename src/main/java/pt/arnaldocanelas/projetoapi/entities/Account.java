@@ -2,19 +2,13 @@ package pt.arnaldocanelas.projetoapi.entities;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -38,10 +32,6 @@ public class Account implements Serializable {
 	@Column(name="creationdate")
 	private LocalDate creationDate;
 	
-	@JsonIgnore  // Ignora a coleção de accounts durante a serialização
-	@OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
-	private List<AccountMovement> accountMovements = new ArrayList<>();
-
 	public Account() {
 	}
 	
@@ -93,8 +83,8 @@ public class Account implements Serializable {
 		this.creationDate = creationDate;
 	}
 	
-	public List<AccountMovement> getAccountMovements() {
-		return accountMovements;
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 
 	@Override
@@ -113,6 +103,14 @@ public class Account implements Serializable {
 		Account other = (Account) obj;
 		return Objects.equals(id, other.id);
 	}
+
+	@Override
+	public String toString() {
+		return "Account [id=" + id + ", bankName=" + bankName + ", holder=" + holder + ", balance=" + balance
+				+ ", creationDate=" + creationDate + "]";
+	}
+	
+	
 	
 }
 

@@ -11,8 +11,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import pt.arnaldocanelas.projetoapi.entities.enums.MovementType;
 
@@ -25,10 +23,9 @@ public class AccountMovement implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private Double amount;
-	
-	@ManyToOne
-	@JoinColumn(name = "accountnumber")
-	private Account account;
+
+	private Long originAccountId;
+	private Long destinationAccountId;
 	
 	@Enumerated(EnumType.STRING)
 	private MovementType type;
@@ -38,10 +35,11 @@ public class AccountMovement implements Serializable {
 
 	public AccountMovement() {}
 	
-	public AccountMovement(Long id, Double amount, Account account, MovementType type, Instant moment) {
+	public AccountMovement(Long id, Double amount, Long originAccountId, Long destinationAccountId,MovementType type, Instant moment) {
 		this.id = id;
 		this.amount = amount;
-		this.account = account;
+		this.originAccountId = originAccountId;
+		this.destinationAccountId = destinationAccountId;
 		this.type = type;
 		this.moment = moment;
 	}
@@ -62,12 +60,21 @@ public class AccountMovement implements Serializable {
 		this.amount = amount;
 	}
 	
-	public Account getAccount() {
-		return account;
+
+	public Long getOriginAccountId() {
+		return originAccountId;
 	}
 
-	public void setAccount(Account account) {
-		this.account = account;
+	public void setOriginAccountId(Long originAccountId) {
+		this.originAccountId = originAccountId;
+	}
+
+	public Long getDestinationAccountId() {
+		return destinationAccountId;
+	}
+
+	public void setDestinationAccountId(Long destinationAccountId) {
+		this.destinationAccountId = destinationAccountId;
 	}
 
 	public MovementType getType() {
@@ -101,12 +108,6 @@ public class AccountMovement implements Serializable {
 			return false;
 		AccountMovement other = (AccountMovement) obj;
 		return Objects.equals(id, other.id);
-	}
-
-	@Override
-	public String toString() {
-		return "AccountMovement [id=" + id + ", amount=" + amount + ", account=" + account + ", type=" + type
-				+ ", moment=" + moment + "]";
 	}
 
 }

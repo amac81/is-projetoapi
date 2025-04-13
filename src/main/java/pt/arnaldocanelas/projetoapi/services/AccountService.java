@@ -57,6 +57,14 @@ public class AccountService<T> {
 		return result.map(x -> new AccountMinDTO(x));
 	}
 	
+	@Transactional(readOnly = true)
+	public Page<AccountDTO> findAllComplete(Pageable pageable) {
+		
+		Page<Account> result = repository.findAll(pageable);
+		
+		//with lambda expression
+		return result.map(x -> new AccountDTO(x));
+	}
 	
 	@Transactional
 	public AccountDTO insert(AccountDTO dto) {

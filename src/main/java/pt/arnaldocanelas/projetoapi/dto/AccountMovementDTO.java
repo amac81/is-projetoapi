@@ -2,7 +2,6 @@ package pt.arnaldocanelas.projetoapi.dto;
 
 import java.time.Instant;
 
-import pt.arnaldocanelas.projetoapi.entities.Account;
 import pt.arnaldocanelas.projetoapi.entities.AccountMovement;
 import pt.arnaldocanelas.projetoapi.entities.enums.MovementType;
 
@@ -11,7 +10,8 @@ public class AccountMovementDTO {
 
 	private Long id;
 	private Double amount;
-	private Account account;
+	private Long originAccountId;
+	private Long destinationAccountId;
 	private MovementType type;
 	
 	private Instant moment;
@@ -21,7 +21,10 @@ public class AccountMovementDTO {
 	public AccountMovementDTO(AccountMovement entity) {
 		this.id = entity.getId();
 		this.amount = entity.getAmount();
-		this.account = entity.getAccount();
+		
+		this.originAccountId = entity.getOriginAccountId();
+		this.destinationAccountId = entity.getDestinationAccountId();
+		
 		this.type = entity.getType();
 		this.moment = entity.getMoment();
     }
@@ -41,13 +44,21 @@ public class AccountMovementDTO {
 	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
-
-	public Account getAccount() {
-		return account;
+	
+	public Long getOriginAccountId() {
+		return originAccountId;
 	}
 
-	public void setAccount(Account account) {
-		this.account = account;
+	public void setOriginAccountId(Long originAccountId) {
+		this.originAccountId = originAccountId;
+	}
+
+	public Long getDestinationAccountId() {
+		return destinationAccountId;
+	}
+
+	public void setDestinationAccountId(Long destinationAccountId) {
+		this.destinationAccountId = destinationAccountId;
 	}
 
 	public MovementType getType() {
@@ -68,8 +79,9 @@ public class AccountMovementDTO {
 
 	@Override
 	public String toString() {
-		return "AccountMovementDTO [id=" + id + ", amount=" + amount + ", account=" + account + ", type=" + type
-				+ ", moment=" + moment + "]";
+		return "AccountMovementDTO [id=" + id + ", amount=" + amount + ", originAccountId=" + originAccountId
+				+ ", destinationAccountId=" + destinationAccountId + ", type=" + type + ", moment=" + moment + "]";
 	}
 
+	
 }
