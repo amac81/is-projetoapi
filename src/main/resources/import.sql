@@ -21,3 +21,5 @@ INSERT INTO tb_account (accountnumber, bankname, holder_id, balance, creationdat
 INSERT INTO tb_account (accountnumber, bankname, holder_id, balance, creationdate) VALUES (1000000008, 'Caixa geral de depósitos', 5, 85.75, '2024-01-25');
 INSERT INTO tb_account (accountnumber, bankname, holder_id, balance, creationdate) VALUES (1000000009, 'Totta', 9, 3210.90, '2022-07-14');
 INSERT INTO tb_account (accountnumber, bankname, holder_id, balance, creationdate) VALUES (1000000010, 'Banco CTT', 1, 110.00, '2023-10-30'); 
+
+-- dados de exemplo tb_accountmovement

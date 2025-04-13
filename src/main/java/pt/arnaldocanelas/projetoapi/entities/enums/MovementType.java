@@ -1,6 +1,6 @@
 package pt.arnaldocanelas.projetoapi.entities.enums;
 
-public enum BankingMovementType {
+public enum MovementType {
 	CREDIT,
 	DEBIT;
 }
