@@ -16,16 +16,12 @@ import pt.arnaldocanelas.projetoapi.controllers.exceptions.ResourceNotFoundExcep
 import pt.arnaldocanelas.projetoapi.dto.AccountMovementDTO;
 import pt.arnaldocanelas.projetoapi.entities.AccountMovement;
 import pt.arnaldocanelas.projetoapi.repositories.AccountMovementRepository;
-import pt.arnaldocanelas.projetoapi.repositories.AccountRepository;
 
 @Service
 public class AccountMovementService<T> {
 
 	@Autowired
 	private AccountMovementRepository accountMovementRepository;
-	
-	@Autowired
-	private AccountRepository accountRepository;
 	
 	@Transactional(readOnly = true)
 	public AccountMovementDTO findById(Long id) {
@@ -48,7 +44,7 @@ public class AccountMovementService<T> {
 	
 	@Transactional
 	public AccountMovementDTO insert(AccountMovementDTO dto) {
-		
+
 		AccountMovement entity = new AccountMovement(); 
 		
 		copyDtoToEntity(dto, entity);
@@ -77,7 +73,7 @@ public class AccountMovementService<T> {
 		}catch(EntityNotFoundException e) {
 			throw new ResourceNotFoundException("Recurso não encontrado");
 		}
-	
+
 	}
 	
 	private void copyDtoToEntity(AccountMovementDTO dto, AccountMovement entity) {

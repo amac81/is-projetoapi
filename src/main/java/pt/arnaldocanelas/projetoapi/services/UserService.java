@@ -14,6 +14,7 @@ import pt.arnaldocanelas.projetoapi.controllers.exceptions.DatabaseException;
 import pt.arnaldocanelas.projetoapi.controllers.exceptions.ResourceNotFoundException;
 import pt.arnaldocanelas.projetoapi.dto.AccountDTO;
 import pt.arnaldocanelas.projetoapi.dto.UserDTO;
+import pt.arnaldocanelas.projetoapi.dto.UserMinDTO;
 import pt.arnaldocanelas.projetoapi.entities.Account;
 import pt.arnaldocanelas.projetoapi.entities.User;
 import pt.arnaldocanelas.projetoapi.repositories.AccountRepository;
@@ -29,22 +30,22 @@ public class UserService<T> {
 	
 	
 	@Transactional(readOnly = true)
-	public UserDTO findById(Long id) {
+	public UserMinDTO findById(Long id) {
 		Optional<User> result = userRepository.findById(id);
 		User entity = result.orElseThrow(
 				()-> new ResourceNotFoundException("Recurso não encontrado"));
 		
 		
-		return new UserDTO(entity);
+		return new UserMinDTO(entity);
 	}
 	
 	@Transactional(readOnly = true)
-	public Page<UserDTO> findAll(Pageable pageable) {
+	public Page<UserMinDTO> findAll(Pageable pageable) {
 		
 		Page<User> result = userRepository.findAll(pageable);
 		
 		//with lambda expression
-		return result.map(x -> new UserDTO(x));
+		return result.map(x -> new UserMinDTO(x));
 	}
 	
 	@Transactional

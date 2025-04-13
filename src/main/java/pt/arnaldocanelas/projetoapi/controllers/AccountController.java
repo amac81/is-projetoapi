@@ -17,6 +17,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import jakarta.validation.Valid;
 import pt.arnaldocanelas.projetoapi.dto.AccountDTO;
+import pt.arnaldocanelas.projetoapi.dto.AccountMinDTO;
 import pt.arnaldocanelas.projetoapi.entities.Account;
 import pt.arnaldocanelas.projetoapi.services.AccountService;
 
@@ -28,14 +29,14 @@ public class AccountController {
 	private AccountService<Account> service;
 	
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<AccountDTO> findById(@PathVariable Long id) {
-		AccountDTO dto = service.findById(id);
+	public ResponseEntity<AccountMinDTO> findById(@PathVariable Long id) {
+		AccountMinDTO dto = service.findById(id);
 		return ResponseEntity.ok(dto);
 	}
 	
 	@GetMapping
-	public ResponseEntity<Page<AccountDTO>> getAll(Pageable pageable) {
-		Page<AccountDTO> page = service.findAll(pageable); 
+	public ResponseEntity<Page<AccountMinDTO>> getAll(Pageable pageable) {
+		Page<AccountMinDTO> page = service.findAll(pageable); 
 		
 		return ResponseEntity.ok(page);
 	}

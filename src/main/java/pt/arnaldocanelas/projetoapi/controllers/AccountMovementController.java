@@ -42,7 +42,7 @@ public class AccountMovementController {
 	
 	@PostMapping
 	public ResponseEntity<AccountMovementDTO> insert(@Valid @RequestBody AccountMovementDTO dto) {
-		
+			
 		dto = service.insert(dto); 
 		
 		//to generate the correct HTTP response code 201 - Created
