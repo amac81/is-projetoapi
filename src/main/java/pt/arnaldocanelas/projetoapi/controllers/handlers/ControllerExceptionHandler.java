@@ -50,8 +50,6 @@ public class ControllerExceptionHandler {
 		return ResponseEntity.status(status).body(err);
 	}
 	
-	
-	
 	@ExceptionHandler(HttpMessageNotReadableException.class)
 	public ResponseEntity<CustomError> jsonParse(HttpMessageNotReadableException e, HttpServletRequest request) 
 	{
