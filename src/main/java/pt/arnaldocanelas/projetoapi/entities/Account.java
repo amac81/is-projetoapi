@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -88,6 +87,14 @@ public class Account implements Serializable {
 		Account other = (Account) obj;
 		return Objects.equals(id, other.id);
 	}
+
+	@Override
+	public String toString() {
+		return "Account [id=" + id + ", holder=" + holder + ", balance=" + balance + ", creationDate=" + creationDate
+				+ "]";
+	}
+	
+	
 	
 }
 

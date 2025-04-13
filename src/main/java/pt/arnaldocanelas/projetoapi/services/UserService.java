@@ -12,19 +12,25 @@ import org.springframework.transaction.annotation.Transactional;
 import jakarta.persistence.EntityNotFoundException;
 import pt.arnaldocanelas.projetoapi.controllers.exceptions.DatabaseException;
 import pt.arnaldocanelas.projetoapi.controllers.exceptions.ResourceNotFoundException;
+import pt.arnaldocanelas.projetoapi.dto.AccountDTO;
 import pt.arnaldocanelas.projetoapi.dto.UserDTO;
+import pt.arnaldocanelas.projetoapi.entities.Account;
 import pt.arnaldocanelas.projetoapi.entities.User;
+import pt.arnaldocanelas.projetoapi.repositories.AccountRepository;
 import pt.arnaldocanelas.projetoapi.repositories.UserRepository;
 
 @Service
 public class UserService<T> {
 
 	@Autowired
-	private UserRepository repository;
+	private UserRepository userRepository;
+	@Autowired
+	private AccountRepository accountRepository;
+	
 	
 	@Transactional(readOnly = true)
 	public UserDTO findById(Long id) {
-		Optional<User> result = repository.findById(id);
+		Optional<User> result = userRepository.findById(id);
 		User entity = result.orElseThrow(
 				()-> new ResourceNotFoundException("Recurso não encontrado"));
 		
@@ -35,7 +41,7 @@ public class UserService<T> {
 	@Transactional(readOnly = true)
 	public Page<UserDTO> findAll(Pageable pageable) {
 		
-		Page<User> result = repository.findAll(pageable);
+		Page<User> result = userRepository.findAll(pageable);
 		
 		//with lambda expression
 		return result.map(x -> new UserDTO(x));
@@ -46,10 +52,9 @@ public class UserService<T> {
 		
 		User entity = new User(); 
 		
-		entity.setName(dto.getName());
-		entity.setAge(dto.getAge());
+		copyDtoToEntity(dto, entity);
 		
-		entity = repository.save(entity);
+		entity = userRepository.save(entity);
 		
 		return new UserDTO(entity);
 	}
@@ -59,12 +64,11 @@ public class UserService<T> {
 		try 
 		{
 			//does not go to the database; object monitored by JPA
-			User entity = repository.getReferenceById(id); 
+			User entity = userRepository.getReferenceById(id); 
 			
-			entity.setName(dto.getName());
-			entity.setAge(dto.getAge());
+			copyDtoToEntity(dto, entity);
 					
-			entity = repository.save(entity);
+			entity = userRepository.save(entity);
 			
 			return new UserDTO(entity);
 		}catch(EntityNotFoundException e) {
@@ -75,18 +79,28 @@ public class UserService<T> {
 	
 	@Transactional(propagation = Propagation.SUPPORTS)
 	public void deleteById(Long id) {
-		if(!repository.existsById(id)) 
+		if(!userRepository.existsById(id)) 
 		{
 			throw new ResourceNotFoundException("Recurso não encontrado");
 		}
 		try 
 		{
-			repository.deleteById(id);
+			userRepository.deleteById(id);
 		}
 		catch (DataIntegrityViolationException e) 
 		{
         	throw new DatabaseException("Falha de integridade referencial");
 		}	
+	}
+	
+	private void copyDtoToEntity(UserDTO dto, User entity) {
+		entity.setName(dto.getName());
+		entity.setAge(dto.getAge());
+		
+		for(AccountDTO accountDto : dto.getAccounts()) {		
+			Account account = accountRepository.getReferenceById(accountDto.getId());
+			entity.getAccounts().add(account);
+		};
 	}
 		
 }
