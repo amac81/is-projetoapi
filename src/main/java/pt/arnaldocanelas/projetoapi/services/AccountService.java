@@ -2,6 +2,7 @@ package pt.arnaldocanelas.projetoapi.services;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +19,23 @@ import pt.arnaldocanelas.projetoapi.controllers.exceptions.ResourceNotFoundExcep
 import pt.arnaldocanelas.projetoapi.dto.AccountDTO;
 import pt.arnaldocanelas.projetoapi.entities.Account;
 import pt.arnaldocanelas.projetoapi.repositories.AccountRepository;
+import pt.arnaldocanelas.projetoapi.services.exceptions.BussinessException;
 
 @Service
 public class AccountService<T> {
 
 	@Autowired
 	private AccountRepository repository;
+	
+	private List<Account> accounts;
+
+	public AccountService(List<Account> accounts) {
+		this.accounts = accounts;
+	}
+
+	public List<Account> getAccounts() {
+		return accounts;
+	}
 	
 	@Transactional(readOnly = true)
 	public AccountDTO findById(Long id) {
@@ -50,10 +62,7 @@ public class AccountService<T> {
 		
 		Account entity = new Account(); 
 		
-		entity.setId(dto.getId());
-		entity.setHolder(dto.getHolder());
-		entity.setBalance(dto.getBalance());
-		
+		copyDtoToEntity(dto, entity);
 		
 		ZoneId fusoHorario = ZoneId.systemDefault(); // ou por exemplo: ZoneId.of("Europe/Lisbon")
         LocalDate dataAtual = Instant.now().atZone(fusoHorario).toLocalDate();
@@ -76,9 +85,7 @@ public class AccountService<T> {
 			//does not go to the database; object monitored by JPA
 			Account entity = repository.getReferenceById(id); 
 			
-			entity.setHolder(dto.getHolder());
-			entity.setId(dto.getId());
-			entity.setCreationDate(dto.getCreationDate());
+			copyDtoToEntity(dto, entity);
 					
 			entity = repository.save(entity);
 			
@@ -87,6 +94,13 @@ public class AccountService<T> {
 			throw new ResourceNotFoundException("Recurso não encontrado");
 		}
 	
+	}
+	
+	private void copyDtoToEntity(AccountDTO dto, Account entity) {
+		entity.setHolder(dto.getHolder());
+		entity.setId(dto.getId());
+		entity.setBankName(dto.getBankName());
+		entity.setCreationDate(dto.getCreationDate());
 	}
 	
 	@Transactional(propagation = Propagation.SUPPORTS)
@@ -103,6 +117,49 @@ public class AccountService<T> {
 		{
         	throw new DatabaseException("Falha de integridade referencial");
 		}	
+	}
+	
+	/**
+	 * Search for an account by accountNumber (Id).
+	 * 
+	 * @param accountNumber (Id) of the account to be searched
+	 * @return the searched account or null if not found
+	 */
+	public Account searchAccount(Long accountNumber) {
+
+		for (Account account : accounts) {
+			if (account.getId() == accountNumber)
+				return account;
+		}
+		return null;
+	}
+	
+	/**
+	 * Transfers a certain amount from an Origin account to a Destination account.
+	 * If there is not enough balance, the amount will not be transferred.
+	 *
+	 * @param originAccountId  account that will have the amount deducted
+	 * @param value value to be transferred
+	 * @param destinAccountId account that will have the value increased
+	 * @return true, if the transfer was successful.
+	 * @throws BussinessException
+	 */
+	public boolean transferValue(Long originAccountId, double value, Long destinAccountId) throws BussinessException {
+
+		boolean success = false;
+
+		Account originAccount = searchAccount(originAccountId);
+		Account destinAccount = searchAccount(destinAccountId);
+
+		if (originAccount.getBalance() >= value) {
+			destinAccount.setBalance(destinAccount.getBalance() + value);
+			originAccount.setBalance(originAccount.getBalance() - value);
+			success = true;
+		} else {
+			throw new BussinessException("Saldo insuficiente na conta de origem.");
+		}
+
+		return success;
 	}
 	
 		

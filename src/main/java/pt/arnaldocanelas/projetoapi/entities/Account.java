@@ -17,8 +17,11 @@ public class Account implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@Column(unique = true, name = "acountnumber")
+	@Column(unique = true, name = "accountnumber")
 	private Long id;
+	
+	@Column(name="bankname")
+	private String bankName;
 	
 	@ManyToOne
 	@JoinColumn(name = "holder_id")
@@ -32,7 +35,8 @@ public class Account implements Serializable {
 	public Account() {
 	}
 	
-	public Account(Long id, User holder, Double balance, LocalDate creationDate) {
+	public Account(Long id, String bankName, User holder, Double balance, LocalDate creationDate) {
+		this.bankName = bankName;
 		this.id = id;
 		this.holder = holder;
 		this.balance = balance;
@@ -45,6 +49,14 @@ public class Account implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public String getBankName() {
+		return bankName;
+	}
+
+	public void setBankName(String bankName) {
+		this.bankName = bankName;
 	}
 
 	public User getHolder() {
@@ -87,14 +99,6 @@ public class Account implements Serializable {
 		Account other = (Account) obj;
 		return Objects.equals(id, other.id);
 	}
-
-	@Override
-	public String toString() {
-		return "Account [id=" + id + ", holder=" + holder + ", balance=" + balance + ", creationDate=" + creationDate
-				+ "]";
-	}
-	
-	
 	
 }
 

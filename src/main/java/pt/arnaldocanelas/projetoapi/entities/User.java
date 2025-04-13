@@ -26,6 +26,7 @@ public class User implements Serializable {
 	
 	private String name;
 	private Integer age;
+	private String nif;
 	
 	@JsonIgnore  // Ignora a coleção de accounts durante a serialização
 	@OneToMany(mappedBy = "holder", fetch = FetchType.LAZY)
@@ -33,10 +34,11 @@ public class User implements Serializable {
 
 	public User() {}
 	
-	public User(Long id, String name, Integer age) {
+	public User(Long id, String name, Integer age, String nif) {
 		this.id = id;
 		this.name = name;
 		this.age = age;
+		this.nif = nif;
 	}
 
 	public Long getId() {
@@ -63,6 +65,14 @@ public class User implements Serializable {
 		this.age = age;
 	}
 	
+	public String getNif() {
+		return nif;
+	}
+
+	public void setNif(String nif) {
+		this.nif = nif;
+	}
+
 	public List<Account> getAccounts() {
 		return accounts;
 	}	
@@ -86,8 +96,7 @@ public class User implements Serializable {
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", name=" + name + ", age=" + age + ", accounts=" + accounts + "]";
+		return "User [id=" + id + ", name=" + name + ", age=" + age + ", nif=" + nif + ", accounts=" + accounts + "]";
 	}
-	
 	
 }

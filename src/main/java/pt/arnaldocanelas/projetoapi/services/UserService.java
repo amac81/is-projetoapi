@@ -95,6 +95,7 @@ public class UserService<T> {
 	
 	private void copyDtoToEntity(UserDTO dto, User entity) {
 		entity.setName(dto.getName());
+		entity.setNif(dto.getNif());
 		entity.setAge(dto.getAge());
 		
 		for(AccountDTO accountDto : dto.getAccounts()) {		
