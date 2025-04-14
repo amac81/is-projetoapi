@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityNotFoundException;
-import pt.arnaldocanelas.projetoapi.controllers.exceptions.BussinessException;
 import pt.arnaldocanelas.projetoapi.controllers.exceptions.DatabaseException;
 import pt.arnaldocanelas.projetoapi.controllers.exceptions.ResourceNotFoundException;
 import pt.arnaldocanelas.projetoapi.dto.AccountDTO;
@@ -78,7 +77,7 @@ public class AccountService<T> {
 		entity.setCreationDate(dataAtual);
 		
 		if (repository.existsById(entity.getId())) {
-			throw new DatabaseException("Conta já existe");
+			throw new DatabaseException("Resource already exists.");
 		}
 		
 		entity = repository.save(entity);
@@ -99,7 +98,7 @@ public class AccountService<T> {
 			
 			return new AccountDTO(entity);
 		}catch(EntityNotFoundException e) {
-			throw new ResourceNotFoundException("Recurso não encontrado");
+			throw new ResourceNotFoundException("Resource " + id + " not found.");
 		}
 	
 	}
@@ -114,7 +113,7 @@ public class AccountService<T> {
 	public void deleteById(Long id) {
 		if(!repository.existsById(id)) 
 		{
-			throw new ResourceNotFoundException("Recurso não encontrado");
+			throw new ResourceNotFoundException("Resource " + id + " not found.");
 		}
 		try 
 		{
@@ -122,7 +121,7 @@ public class AccountService<T> {
 		}	
 		catch (DataIntegrityViolationException e) 
 		{
-        	throw new DatabaseException("Falha de integridade referencial");
+        	throw new DatabaseException("Referential integrity failure.");
 		}	
 	}
 	
@@ -140,34 +139,5 @@ public class AccountService<T> {
 		}
 		return null;
 	}
-	
-	/**
-	 * Transfers a certain amount from an Origin account to a Destination account.
-	 * If there is not enough balance, the amount will not be transferred.
-	 *
-	 * @param originAccountId  account that will have the amount deducted
-	 * @param value value to be transferred
-	 * @param destinAccountId account that will have the value increased
-	 * @return true, if the transfer was successful.
-	 * @throws BussinessException
-	 */
-	public boolean transferValue(Long originAccountId, double value, Long destinAccountId) throws BussinessException {
-
-		boolean success = false;
-
-		Account originAccount = searchAccount(originAccountId);
-		Account destinAccount = searchAccount(destinAccountId);
-
-		if (originAccount.getBalance() >= value) {
-			destinAccount.setBalance(destinAccount.getBalance() + value);
-			originAccount.setBalance(originAccount.getBalance() - value);
-			success = true;
-		} else {
-			throw new BussinessException("Saldo insuficiente na conta de origem.");
-		}
-
-		return success;
-	}
-	
 		
 }
