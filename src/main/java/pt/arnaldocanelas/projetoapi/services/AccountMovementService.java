@@ -1,4 +1,5 @@
 package pt.arnaldocanelas.projetoapi.services;
+import java.time.Instant;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,16 +62,20 @@ public class AccountMovementService<T> {
 		AccountMovement originAccountMovement = new AccountMovement(); 
 		AccountMovement destinationAccountMovement = new AccountMovement();
 		
-		boolean result = transferValue(dto.getOriginAccountId(), dto.getDestinationAccountId(), dto.getAmount() ,dto.getType());
+		boolean success = transferValue(dto.getOriginAccountId(), dto.getDestinationAccountId(), dto.getAmount());
 		
-		if(!result) 
+		if(!success) 
 		{
 			throw new BussinessException("Insufficient funds in the origin account!");
 		}
 		
+		//sucess
 		
-		//originAccountMovement = accountMovementRepository.save(originAccountMovement);
-		//destinationAccountMovement = accountMovementRepository.save(destinationAccountMovement);
+		copyDtoToEntity(dto, originAccountMovement, MovementType.DEBIT);
+		originAccountMovement = accountMovementRepository.save(originAccountMovement);
+		
+		copyDtoToEntity(dto, destinationAccountMovement, MovementType.CREDIT);
+		destinationAccountMovement = accountMovementRepository.save(destinationAccountMovement);
 			
 		return new AccountMovementReportDTO(originAccountMovement, destinationAccountMovement);
 	}
@@ -84,20 +89,11 @@ public class AccountMovementService<T> {
 	 * @param originAccountId  account that will have the amount deducted
 	 * @param ammount value to be transferred
 	 * @param destinAccountId account that will have the value increased
-	 * @param type (DEBIT, CREDIT)
 	 * @return true, if the transfer was successful.
-	 * @throws BussinessException
 	 */
-	public boolean transferValue(Long originAccountId, Long destinAccountId, double ammount, MovementType type) {
+	public boolean transferValue(Long originAccountId, Long destinAccountId, double ammount) {
 
 		boolean success = false;
-		
-		if(type == MovementType.DEBIT){
-			System.out.println("DEBIT");
-		}else {
-			System.out.println("CREDIT");
-		}
-
 		
 		Optional<Account> result = accountRepository.findById(originAccountId);
 		Account originAccount = result.orElseThrow(
@@ -113,17 +109,8 @@ public class AccountMovementService<T> {
 			success = true;
 		}
 		
-		System.out.println(originAccount);
-		System.out.println(destinAccount);
-		
-		//copyDtoToEntity(dto, originAccountMovement);
-				//copyDtoToEntity(dto, destinationAccountMovement);
-				//originAccountMovement.setMoment(Instant.now());
-				//destinationAccountMovement.setMoment(Instant.now());
-		
 		return success;
 	}
-	
 
 
 	@Transactional
@@ -133,7 +120,7 @@ public class AccountMovementService<T> {
 			//does not go to the database; object monitored by JPA
 			AccountMovement entity = accountMovementRepository.getReferenceById(id); 
 			
-			copyDtoToEntity(dto, entity);
+			copyDtoToEntity(dto, entity, null);
 					
 			entity = accountMovementRepository.save(entity);
 			
@@ -144,15 +131,20 @@ public class AccountMovementService<T> {
 
 	}
 	
-	private void copyDtoToEntity(AccountMovementDTO dto, AccountMovement entity) {
+	private void copyDtoToEntity(AccountMovementDTO dto, AccountMovement entity, MovementType type) {
 		entity.setId(dto.getId());
+		
+		double amount = dto.getAmount();
+		if(type == MovementType.DEBIT) {
+			amount*=-1;
+		}
 		
 		entity.setOriginAccountId(dto.getOriginAccountId());	
 		entity.setDestinationAccountId(dto.getDestinationAccountId());
 		
-		entity.setAmount(dto.getAmount());
-		entity.setType(dto.getType());
-		entity.setMoment(dto.getMoment());
+		entity.setAmount(amount);
+		entity.setType(type);
+		entity.setMoment(Instant.now());
 	}
 	
 	@Transactional(propagation = Propagation.SUPPORTS)
