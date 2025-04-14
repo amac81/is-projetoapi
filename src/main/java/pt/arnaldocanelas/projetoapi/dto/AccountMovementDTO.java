@@ -2,18 +2,17 @@ package pt.arnaldocanelas.projetoapi.dto;
 
 import java.time.Instant;
 
+import pt.arnaldocanelas.projetoapi.entities.Account;
 import pt.arnaldocanelas.projetoapi.entities.AccountMovement;
-import pt.arnaldocanelas.projetoapi.entities.enums.MovementType;
 
 
 public class AccountMovementDTO {
 
 	private Long id;
 	private Double amount;
-	private Long originAccountId;
-	private Long destinationAccountId;
-	private MovementType type;
 	
+	
+	private Account account;
 	private Instant moment;
 
 	public AccountMovementDTO() {}
@@ -21,11 +20,7 @@ public class AccountMovementDTO {
 	public AccountMovementDTO(AccountMovement entity) {
 		this.id = entity.getId();
 		this.amount = entity.getAmount();
-		
-		this.originAccountId = entity.getOriginAccountId();
-		this.destinationAccountId = entity.getDestinationAccountId();
-		
-		this.type = entity.getType();
+		this.account = entity.getAccount();
 		this.moment = entity.getMoment();
     }
 
@@ -45,28 +40,12 @@ public class AccountMovementDTO {
 		this.amount = amount;
 	}
 	
-	public Long getOriginAccountId() {
-		return originAccountId;
+	public Account getAccount() {
+		return account;
 	}
 
-	public void setOriginAccountId(Long originAccountId) {
-		this.originAccountId = originAccountId;
-	}
-
-	public Long getDestinationAccountId() {
-		return destinationAccountId;
-	}
-
-	public void setDestinationAccountId(Long destinationAccountId) {
-		this.destinationAccountId = destinationAccountId;
-	}
-
-	public MovementType getType() {
-		return type;
-	}
-
-	public void setType(MovementType type) {
-		this.type = type;
+	public void setAccount(Account account) {
+		this.account = account;
 	}
 
 	public Instant getMoment() {
@@ -79,9 +58,7 @@ public class AccountMovementDTO {
 
 	@Override
 	public String toString() {
-		return "AccountMovementDTO [id=" + id + ", amount=" + amount + ", originAccountId=" + originAccountId
-				+ ", destinationAccountId=" + destinationAccountId + ", type=" + type + ", moment=" + moment + "]";
+		return "AccountMovementDTO [id=" + id + ", amount=" + amount + ", account=" + account + ", moment=" + moment
+				+ "]";
 	}
-
-	
 }

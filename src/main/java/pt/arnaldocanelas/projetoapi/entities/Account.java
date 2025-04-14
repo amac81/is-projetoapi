@@ -2,13 +2,19 @@ package pt.arnaldocanelas.projetoapi.entities;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -20,9 +26,6 @@ public class Account implements Serializable {
 	@Column(unique = true, name = "accountnumber")
 	private Long id;
 	
-	@Column(name="bankname")
-	private String bankName;
-	
 	@ManyToOne
 	@JoinColumn(name = "holder_id")
 	private User holder;
@@ -32,11 +35,15 @@ public class Account implements Serializable {
 	@Column(name="creationdate")
 	private LocalDate creationDate;
 	
+	@JsonIgnore  // Ignora a coleção de accounts durante a serialização
+	@OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
+	private List<AccountMovement> movements = new ArrayList<>();
+	
 	public Account() {
+		balance = 0.0;
 	}
 	
-	public Account(Long id, String bankName, User holder, Double balance, LocalDate creationDate) {
-		this.bankName = bankName;
+	public Account(Long id, User holder, Double balance, LocalDate creationDate) {
 		this.id = id;
 		this.holder = holder;
 		this.balance = balance;
@@ -51,14 +58,6 @@ public class Account implements Serializable {
 		this.id = id;
 	}
 	
-	public String getBankName() {
-		return bankName;
-	}
-
-	public void setBankName(String bankName) {
-		this.bankName = bankName;
-	}
-
 	public User getHolder() {
 		return holder;
 	}
@@ -108,7 +107,6 @@ public class Account implements Serializable {
 	public String toString() {
 		return "Account [id=" + id + ", balance=" + balance + "]";
 	}
-
 		
 }
 

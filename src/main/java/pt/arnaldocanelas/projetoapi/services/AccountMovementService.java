@@ -3,19 +3,13 @@ import java.time.Instant;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.persistence.EntityNotFoundException;
-import pt.arnaldocanelas.projetoapi.controllers.exceptions.BussinessException;
-import pt.arnaldocanelas.projetoapi.controllers.exceptions.DatabaseException;
 import pt.arnaldocanelas.projetoapi.controllers.exceptions.ResourceNotFoundException;
 import pt.arnaldocanelas.projetoapi.dto.AccountMovementDTO;
-import pt.arnaldocanelas.projetoapi.dto.AccountMovementReportDTO;
 import pt.arnaldocanelas.projetoapi.entities.Account;
 import pt.arnaldocanelas.projetoapi.entities.AccountMovement;
 import pt.arnaldocanelas.projetoapi.entities.enums.MovementType;
@@ -51,7 +45,7 @@ public class AccountMovementService<T> {
 	
 	
 	@Transactional
-	public AccountMovementReportDTO insert(AccountMovementDTO dto) {
+	public AccountMovementDTO insert(AccountMovementDTO dto) {
 		
 		//Testar se é possível
 		
@@ -62,22 +56,18 @@ public class AccountMovementService<T> {
 		AccountMovement originAccountMovement = new AccountMovement(); 
 		AccountMovement destinationAccountMovement = new AccountMovement();
 		
-		boolean success = transferValue(dto.getOriginAccountId(), dto.getDestinationAccountId(), dto.getAmount());
+	/*	boolean success = transferValue(dto.getOriginAccountId(), dto.getDestinationAccountId(), dto.getAmount());
 		
 		if(!success) 
 		{
 			throw new BussinessException("Insufficient funds in the origin account!");
-		}
+		}*/
 		
 		//sucess
 		
-		copyDtoToEntity(dto, originAccountMovement, MovementType.DEBIT);
-		originAccountMovement = accountMovementRepository.save(originAccountMovement);
 		
-		copyDtoToEntity(dto, destinationAccountMovement, MovementType.CREDIT);
-		destinationAccountMovement = accountMovementRepository.save(destinationAccountMovement);
 			
-		return new AccountMovementReportDTO(originAccountMovement, destinationAccountMovement);
+		return new AccountMovementDTO();
 	}
 	
 
@@ -97,11 +87,11 @@ public class AccountMovementService<T> {
 		
 		Optional<Account> result = accountRepository.findById(originAccountId);
 		Account originAccount = result.orElseThrow(
-				()-> new ResourceNotFoundException("Recurso não encontrado"));
+				()-> new ResourceNotFoundException("originAccountId: " + originAccountId + " not found."));
 		
 		result = accountRepository.findById(destinAccountId);
 		Account destinAccount = result.orElseThrow(
-				()-> new ResourceNotFoundException("Recurso não encontrado"));
+				()-> new ResourceNotFoundException("destinAccountId: " + destinAccountId + " not found."));
 		
 		if (originAccount.getBalance() >= ammount) {
 			destinAccount.setBalance(destinAccount.getBalance() + ammount);
@@ -112,25 +102,6 @@ public class AccountMovementService<T> {
 		return success;
 	}
 
-
-	@Transactional
-	public AccountMovementDTO update(Long id, AccountMovementDTO dto) {
-		try 
-		{
-			//does not go to the database; object monitored by JPA
-			AccountMovement entity = accountMovementRepository.getReferenceById(id); 
-			
-			copyDtoToEntity(dto, entity, null);
-					
-			entity = accountMovementRepository.save(entity);
-			
-			return new AccountMovementDTO(entity);
-		}catch(EntityNotFoundException e) {
-			throw new ResourceNotFoundException("Recurso não encontrado");
-		}
-
-	}
-	
 	private void copyDtoToEntity(AccountMovementDTO dto, AccountMovement entity, MovementType type) {
 		entity.setId(dto.getId());
 		
@@ -139,29 +110,13 @@ public class AccountMovementService<T> {
 			amount*=-1;
 		}
 		
-		entity.setOriginAccountId(dto.getOriginAccountId());	
-		entity.setDestinationAccountId(dto.getDestinationAccountId());
+		entity.setAccount(dto.getAccount());	
+		
 		
 		entity.setAmount(amount);
 		entity.setType(type);
 		entity.setMoment(Instant.now());
 	}
 	
-	@Transactional(propagation = Propagation.SUPPORTS)
-	public void deleteById(Long id) {
-		if(!accountMovementRepository.existsById(id)) 
-		{
-			throw new ResourceNotFoundException("Recurso não encontrado");
-		}
-		try 
-		{
-			accountMovementRepository.deleteById(id);
-		}	
-		catch (DataIntegrityViolationException e) 
-		{
-        	throw new DatabaseException("Falha de integridade referencial");
-		}	
-	}
-	
-		
+			
 }

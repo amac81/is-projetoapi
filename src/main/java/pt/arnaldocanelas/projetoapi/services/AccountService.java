@@ -42,8 +42,7 @@ public class AccountService<T> {
 	public AccountMinDTO findById(Long id) {
 		Optional<Account> result = repository.findById(id);
 		Account entity = result.orElseThrow(
-				()-> new ResourceNotFoundException("Recurso não encontrado"));
-		
+				()-> new ResourceNotFoundException("Resource " + id + " not found."));
 		
 		return new AccountMinDTO(entity);
 	}
@@ -108,7 +107,6 @@ public class AccountService<T> {
 	private void copyDtoToEntity(AccountDTO dto, Account entity) {
 		entity.setHolder(dto.getHolder());
 		entity.setId(dto.getId());
-		entity.setBankName(dto.getBankName());
 		entity.setCreationDate(dto.getCreationDate());
 	}
 	
