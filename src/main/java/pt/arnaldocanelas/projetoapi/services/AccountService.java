@@ -14,13 +14,13 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityNotFoundException;
+import pt.arnaldocanelas.projetoapi.controllers.exceptions.BussinessException;
 import pt.arnaldocanelas.projetoapi.controllers.exceptions.DatabaseException;
 import pt.arnaldocanelas.projetoapi.controllers.exceptions.ResourceNotFoundException;
 import pt.arnaldocanelas.projetoapi.dto.AccountDTO;
 import pt.arnaldocanelas.projetoapi.dto.AccountMinDTO;
 import pt.arnaldocanelas.projetoapi.entities.Account;
 import pt.arnaldocanelas.projetoapi.repositories.AccountRepository;
-import pt.arnaldocanelas.projetoapi.services.exceptions.BussinessException;
 
 @Service
 public class AccountService<T> {

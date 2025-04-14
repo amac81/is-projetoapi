@@ -1,5 +1,4 @@
 package pt.arnaldocanelas.projetoapi.services;
-import java.time.Instant;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,18 +10,25 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityNotFoundException;
+import pt.arnaldocanelas.projetoapi.controllers.exceptions.BussinessException;
 import pt.arnaldocanelas.projetoapi.controllers.exceptions.DatabaseException;
 import pt.arnaldocanelas.projetoapi.controllers.exceptions.ResourceNotFoundException;
 import pt.arnaldocanelas.projetoapi.dto.AccountMovementDTO;
 import pt.arnaldocanelas.projetoapi.dto.AccountMovementReportDTO;
+import pt.arnaldocanelas.projetoapi.entities.Account;
 import pt.arnaldocanelas.projetoapi.entities.AccountMovement;
+import pt.arnaldocanelas.projetoapi.entities.enums.MovementType;
 import pt.arnaldocanelas.projetoapi.repositories.AccountMovementRepository;
+import pt.arnaldocanelas.projetoapi.repositories.AccountRepository;
 
 @Service
 public class AccountMovementService<T> {
 
 	@Autowired
 	private AccountMovementRepository accountMovementRepository;
+	
+	@Autowired
+	private AccountRepository accountRepository;
 	
 	@Transactional(readOnly = true)
 	public AccountMovementDTO findById(Long id) {
@@ -51,22 +57,75 @@ public class AccountMovementService<T> {
 		//TODO Identificar tipo de movimento
 		//Registar movimentos das duas contas
 		//e atualizar os saldos
-
+		
 		AccountMovement originAccountMovement = new AccountMovement(); 
 		AccountMovement destinationAccountMovement = new AccountMovement();
 		
-		copyDtoToEntity(dto, originAccountMovement);
-		copyDtoToEntity(dto, destinationAccountMovement);
-			
-		originAccountMovement.setMoment(Instant.now());
-		destinationAccountMovement.setMoment(Instant.now());
+		boolean result = transferValue(dto.getOriginAccountId(), dto.getDestinationAccountId(), dto.getAmount() ,dto.getType());
 		
-		originAccountMovement = accountMovementRepository.save(originAccountMovement);
-		destinationAccountMovement = accountMovementRepository.save(destinationAccountMovement);
+		if(!result) 
+		{
+			throw new BussinessException("Insufficient funds in the origin account!");
+		}
+		
+		
+		//originAccountMovement = accountMovementRepository.save(originAccountMovement);
+		//destinationAccountMovement = accountMovementRepository.save(destinationAccountMovement);
 			
 		return new AccountMovementReportDTO(originAccountMovement, destinationAccountMovement);
 	}
 	
+
+	
+	/**
+	 * Transfers a certain amount from an Origin account to a Destination account.
+	 * If there is not enough balance, the amount will not be transferred.
+	 *
+	 * @param originAccountId  account that will have the amount deducted
+	 * @param ammount value to be transferred
+	 * @param destinAccountId account that will have the value increased
+	 * @param type (DEBIT, CREDIT)
+	 * @return true, if the transfer was successful.
+	 * @throws BussinessException
+	 */
+	public boolean transferValue(Long originAccountId, Long destinAccountId, double ammount, MovementType type) {
+
+		boolean success = false;
+		
+		if(type == MovementType.DEBIT){
+			System.out.println("DEBIT");
+		}else {
+			System.out.println("CREDIT");
+		}
+
+		
+		Optional<Account> result = accountRepository.findById(originAccountId);
+		Account originAccount = result.orElseThrow(
+				()-> new ResourceNotFoundException("Recurso não encontrado"));
+		
+		result = accountRepository.findById(destinAccountId);
+		Account destinAccount = result.orElseThrow(
+				()-> new ResourceNotFoundException("Recurso não encontrado"));
+		
+		if (originAccount.getBalance() >= ammount) {
+			destinAccount.setBalance(destinAccount.getBalance() + ammount);
+			originAccount.setBalance(originAccount.getBalance() - ammount);
+			success = true;
+		}
+		
+		System.out.println(originAccount);
+		System.out.println(destinAccount);
+		
+		//copyDtoToEntity(dto, originAccountMovement);
+				//copyDtoToEntity(dto, destinationAccountMovement);
+				//originAccountMovement.setMoment(Instant.now());
+				//destinationAccountMovement.setMoment(Instant.now());
+		
+		return success;
+	}
+	
+
+
 	@Transactional
 	public AccountMovementDTO update(Long id, AccountMovementDTO dto) {
 		try 

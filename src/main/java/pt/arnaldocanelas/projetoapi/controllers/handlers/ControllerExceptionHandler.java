@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import jakarta.servlet.http.HttpServletRequest;
+import pt.arnaldocanelas.projetoapi.controllers.exceptions.BussinessException;
+import pt.arnaldocanelas.projetoapi.controllers.exceptions.DatabaseException;
 import pt.arnaldocanelas.projetoapi.controllers.exceptions.ResourceNotFoundException;
 import pt.arnaldocanelas.projetoapi.dto.CustomErrorDTO;
 import pt.arnaldocanelas.projetoapi.dto.ValidationErrorDTO;
@@ -28,7 +30,24 @@ public class ControllerExceptionHandler {
 		return ResponseEntity.status(status).body(err);
 	}	
 	
-
+	@ExceptionHandler(BussinessException.class)
+	public ResponseEntity<CustomErrorDTO> bussinessLogic(BussinessException e, HttpServletRequest request) 
+	{
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		CustomErrorDTO err = new CustomErrorDTO(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
+		
+		return ResponseEntity.status(status).body(err);
+	}
+	
+	@ExceptionHandler(DatabaseException.class)
+	public ResponseEntity<CustomErrorDTO> databaseViolations(DatabaseException e, HttpServletRequest request) 
+	{
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		CustomErrorDTO err = new CustomErrorDTO(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
+		
+		return ResponseEntity.status(status).body(err);
+	}
+	
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<CustomErrorDTO> resourceNotFound(ResourceNotFoundException e, HttpServletRequest request) 
 	{
