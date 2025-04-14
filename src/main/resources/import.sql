@@ -1,7 +1,7 @@
 -- dados de exemplo tb_user
 INSERT INTO tb_user (name, age, nif) VALUES ('João Silva', 30, '209323223');
 INSERT INTO tb_user (name, age, nif) VALUES ('Maria Santos', 25, '209311123');
-INSERT INTO tb_user (name, age, nif) VALUES ('Carlos Ferreira', '12932423');
+INSERT INTO tb_user (name, age, nif) VALUES ('Carlos Ferreira', 33, '12932423');
 INSERT INTO tb_user (name, age, nif) VALUES ('Ana Costa', 22, '203211123');
 INSERT INTO tb_user (name, age, nif) VALUES ('Rui Oliveira', 35, '200222222');
 INSERT INTO tb_user (name, age, nif) VALUES ('Beatriz Matos', 28, '122233222');
