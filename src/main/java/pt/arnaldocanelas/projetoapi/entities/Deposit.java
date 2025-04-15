@@ -6,15 +6,15 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "deposit_movement")
-public class DepositMovement extends AccountMovement {
+@Table(name = "deposit")
+public class Deposit extends AccountMovement {
 	private static final long serialVersionUID = 1L;
 	
 	private String destinationBank;
 	private String destinationAccountHolderName;	
 	private String destinationAccountHolderNif;
 	
-	public DepositMovement(Long id, Instant moment, double amount, String description, Long originAccountNumber,
+	public Deposit(Long id, Instant moment, double amount, String description, Long originAccountNumber,
 			Long destinationAccountNumber, String destinationBank, String destinationAccountHolderName,
 			String destinationAccountHolderNif) {
 		super(id, moment, amount, description, originAccountNumber, destinationAccountNumber);
