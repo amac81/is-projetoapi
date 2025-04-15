@@ -35,10 +35,6 @@ public class Account implements Serializable {
 	@Column(name="creationdate")
 	private LocalDate creationDate;
 	
-	@JsonIgnore  // Ignora a coleção de accounts durante a serialização
-	@OneToMany(mappedBy = "account", fetch = FetchType.LAZY)
-	private List<AccountMovement> movements = new ArrayList<>();
-	
 	public Account() {
 		balance = 0.0;
 	}

@@ -2,80 +2,47 @@ package pt.arnaldocanelas.projetoapi.entities;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.Objects;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import pt.arnaldocanelas.projetoapi.entities.enums.MovementType;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+
 
 @Entity
-@Table(name="tb_accountmovement")
-public class AccountMovement implements Serializable {
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+public abstract class AccountMovement implements Serializable{
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	private Double amount;
-
-	@ManyToOne
-	@JoinColumn(name = "account_id")
-	private Account account;
-		
-	@Enumerated(EnumType.STRING)
-	private MovementType type;
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private  Long id;
 	
-	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")//UTC
-	private Instant moment;
-
-	public AccountMovement() {}
-	
-	public AccountMovement(Long id, Double amount, Account account, MovementType type, Instant moment) {
+	protected Instant moment;
+    protected double amount;
+    protected String description;
+    protected Long originAccountNumber;
+    protected Long destinationAccountNumber;
+  
+	public AccountMovement(Long id, Instant moment, double amount, String description, Long originAccountNumber,
+			Long destinationAccountNumber) {
+		super();
 		this.id = id;
-		this.amount = amount;
-		this.account = account;
-		this.type = type;
 		this.moment = moment;
+		this.amount = amount;
+		this.description = description;
+		this.originAccountNumber = originAccountNumber;
+		this.destinationAccountNumber = destinationAccountNumber;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Double getAmount() {
-		return amount;
-	}
-
-	public void setAmount(Double amount) {
-		this.amount = amount;
-	}
-	
-	public Account getAccount() {
-		return account;
-	}
-
-	public void setAccount(Account account) {
-		this.account = account;
-	}
-
-	public MovementType getType() {
-		return type;
-	}
-
-	public void setType(MovementType type) {
-		this.type = type;
 	}
 
 	public Instant getMoment() {
@@ -86,21 +53,38 @@ public class AccountMovement implements Serializable {
 		this.moment = moment;
 	}
 
-	@Override
-	public int hashCode() {
-		return Objects.hash(id);
+	public double getAmount() {
+		return amount;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		AccountMovement other = (AccountMovement) obj;
-		return Objects.equals(id, other.id);
+	public void setAmount(double amount) {
+		this.amount = amount;
 	}
 
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public Long getOriginAccountNumber() {
+		return originAccountNumber;
+	}
+
+	public void setOriginAccountNumber(Long originAccountNumber) {
+		this.originAccountNumber = originAccountNumber;
+	}
+
+	public Long getDestinationAccountNumber() {
+		return destinationAccountNumber;
+	}
+
+	public void setDestinationAccountNumber(Long destinationAccountNumber) {
+		this.destinationAccountNumber = destinationAccountNumber;
+	}
+
+	// Método abstrato que será implementado por cada tipo de movimento
+    public abstract void execute();
 }
