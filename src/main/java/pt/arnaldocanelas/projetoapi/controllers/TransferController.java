@@ -15,31 +15,32 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import jakarta.validation.Valid;
-import pt.arnaldocanelas.projetoapi.dto.DepositDTO;
+import pt.arnaldocanelas.projetoapi.dto.TransferDTO;
 import pt.arnaldocanelas.projetoapi.entities.Transfer;
+import pt.arnaldocanelas.projetoapi.services.TransferService;
 
 @RestController
 @RequestMapping(value = "/transfers")
 public class TransferController {
 
-	@Autowired
+	@Autowired	
 	private TransferService<Transfer> service;
 	
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<DepositDTO> findById(@PathVariable Long id) {
-		DepositDTO dto = service.findById(id);
+	public ResponseEntity<TransferDTO> findById(@PathVariable Long id) {
+		TransferDTO dto = service.findById(id);
 		return ResponseEntity.ok(dto);
 	}
 	
 	@GetMapping
-	public ResponseEntity<Page<DepositDTO>> getAll(Pageable pageable) {
-		Page<DepositDTO> page = service.findAll(pageable); 
+	public ResponseEntity<Page<TransferDTO>> getAll(Pageable pageable) {
+		Page<TransferDTO> page = service.findAll(pageable); 
 		
 		return ResponseEntity.ok(page);
 	}
 	
 	@PostMapping
-	public ResponseEntity<DepositDTO> insert(@Valid @RequestBody DepositDTO dto) {
+	public ResponseEntity<TransferDTO> insert(@Valid @RequestBody TransferDTO dto) {
 		
 		dto = service.insert(dto); 
 		

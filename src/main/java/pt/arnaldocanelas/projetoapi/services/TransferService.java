@@ -46,11 +46,11 @@ public class TransferService<T> {
 	@Transactional
 	public TransferDTO insert(TransferDTO dto) {
 		
-		Long destinationAccountID = dto.getDestinationAccount().getId();
+		Long originAccountId = dto.getOriginAccount().getId();
 		
-		if(!accountRepository.existsById(destinationAccountID)) 
+		if(!accountRepository.existsById(originAccountId)) 
 		{
-			throw new ResourceNotFoundException("Resource " + destinationAccountID + " not found.");
+			throw new ResourceNotFoundException("Resource " + originAccountId + " not found.");
 		}
 		else 
 		{
@@ -66,12 +66,14 @@ public class TransferService<T> {
 		entity.setAmount(dto.getAmount());
 		entity.setMoment(Instant.now());
 		entity.setDescription(dto.getDescription());
-		entity.setOriginBank(dto.getOriginBank());
-		entity.setOriginAccountHolderName(dto.getOriginAccountHolderName());
-		entity.setOriginAccountHolderNif(dto.getOriginAccountHolderNif());
-		entity.setOriginAccountNumber(dto.getOriginAccountNumber());
-		Account account = accountRepository.getReferenceById(dto.getDestinationAccount().getId());
-		entity.setDestinationAccount(account);
+		entity.setDestinationBank(dto.getDestinationBank());
+		entity.setDestinationAccountHolderName(dto.getDestinationAccountHolderName());
+		entity.setDestinationAccountHolderNif(dto.getDestinationAccountHolderNif());
+		
+		Account account = accountRepository.getReferenceById(dto.getOriginAccount().getId());
+		entity.setOriginAccount(account);
+		
+		entity.setDestinationAccountNumber(dto.getDestinationAccountNumber());
 	}
 		
 }
