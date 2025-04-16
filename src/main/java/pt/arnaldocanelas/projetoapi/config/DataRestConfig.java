@@ -1,4 +1,4 @@
-package pt.arnaldocanelas.projetoapi.config;
+	package pt.arnaldocanelas.projetoapi.config;
 
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -29,7 +29,8 @@ public class DataRestConfig {
 
     @Bean
     SpringDataWebSettings springDataWebSettings(SpringDataWebProperties springDataWebProperties) {
-        return new SpringDataWebSettings(springDataWebProperties.getPageable().getSerializationMode());
+        springDataWebProperties.getPageable().getSerializationMode();
+		return new SpringDataWebSettings(PageSerializationMode.VIA_DTO);
     }
 
 }

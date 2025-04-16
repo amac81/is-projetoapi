@@ -1,6 +1,9 @@
 package pt.arnaldocanelas.projetoapi.dto;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import pt.arnaldocanelas.projetoapi.entities.Account;
 import pt.arnaldocanelas.projetoapi.entities.User;
@@ -11,6 +14,8 @@ public class AccountDTO {
 	private User holder;
 	private Double balance;
 	private LocalDate creationDate;
+	
+	private List<DepositMinDTO> deposits = new ArrayList<>();
 	
 	public AccountDTO() {}
 
@@ -26,6 +31,9 @@ public class AccountDTO {
 		this.holder = entity.getHolder();
 		this.balance = entity.getBalance();
 		this.creationDate = entity.getCreationDate();
+		
+		deposits = entity.getDeposits().stream().map(x->new DepositMinDTO(x)).collect(Collectors.toList());
+
     }
 
 	public Long getId() {
@@ -54,6 +62,10 @@ public class AccountDTO {
 
 	public void setCreationDate(LocalDate creationDate) {
 		this.creationDate = creationDate;
+	}
+	
+	public List<DepositMinDTO> getDeposits() {
+		return deposits;
 	}
 
 	@Override
