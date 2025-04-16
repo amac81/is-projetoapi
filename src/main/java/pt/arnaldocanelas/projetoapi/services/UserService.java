@@ -5,6 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -104,6 +107,18 @@ public class UserService<T> {
 			Account account = accountRepository.getReferenceById(accountDto.getId());
 			entity.getAccounts().add(account);
 		};
+	}
+	
+	private String getLoggedUserName() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null ? authentication.getName() : null; 
+    }
+	
+	public User getLoggedInUser() {
+	     User user = userRepository.findByUsername(getLoggedUserName())
+	                .orElseThrow(() -> new UsernameNotFoundException("User not found."));
+		
+		return user;
 	}
 		
 }

@@ -43,13 +43,15 @@ public class AccountController {
 	
 	
 	@PostMapping
-	public ResponseEntity<AccountDTO> insert(@Valid @RequestBody AccountDTO dto) {
+	public ResponseEntity<AccountMinDTO> autoAccount() {
 		
-		dto = service.insert(dto); 
+		AccountMinDTO dto;
+		
+		dto = service.auto(); 
 		
 		//to generate the correct HTTP response code 201 - Created
 		//good programming practice Post 
-		URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/{id}").buildAndExpand(dto.getId())
+		URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/").buildAndExpand()
 				.toUri();
 		
 		return ResponseEntity.created(uri).body(dto);

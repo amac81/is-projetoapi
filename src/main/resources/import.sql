@@ -10,15 +10,16 @@ INSERT INTO tb_user (username, password, name, age, nif) VALUES ('ana', '$2a$10$
 INSERT INTO tb_user (username, password, name, age, nif) VALUES ('carlos', '$2a$10$FxIVtBa17WwEf04sN365B.1kEIPkZWJs9VC0Lpv8s8.F6gsRxMD9u', 'Carlos Pereira', 47, '789012345');
 
 -- dados de exemplo tb_account
-INSERT INTO tb_account (accountnumber, holder_id, balance, creationdate) VALUES (1000000001, 1, 1500.50, '2023-01-15');
-INSERT INTO tb_account (accountnumber, holder_id, balance, creationdate) VALUES (1000000002, 2, 235.75, '2022-11-03');
-INSERT INTO tb_account (accountnumber, holder_id, balance, creationdate) VALUES (1000000003, 1, 9820.00, '2021-06-21');
-INSERT INTO tb_account (accountnumber, holder_id, balance, creationdate) VALUES (1000000004, 4, 125.00, '2024-02-10');
-INSERT INTO tb_account (accountnumber, holder_id, balance, creationdate) VALUES (1000000005, 2, 450.25, '2023-09-05');
-INSERT INTO tb_account (accountnumber, holder_id, balance, creationdate) VALUES (1000000006, 6, 5000.00, '2020-12-01');
-INSERT INTO tb_account (accountnumber, holder_id, balance, creationdate) VALUES (1000000007, 7, 742.30, '2023-04-18');
-INSERT INTO tb_account (accountnumber, holder_id, balance, creationdate) VALUES (1000000008, 5, 85.75, '2024-01-25');
-INSERT INTO tb_account (accountnumber, holder_id, balance, creationdate) VALUES (1000000009, 9, 3210.90, '2022-07-14');
-INSERT INTO tb_account (accountnumber, holder_id, balance, creationdate) VALUES (1000000010, 1, 110.00, '2023-10-30'); 
+INSERT INTO tb_account (holder_id, balance, creationdate) VALUES (1, 1500.50, '2023-01-15');
+INSERT INTO tb_account (holder_id, balance, creationdate) VALUES (2, 235.75, '2022-11-03');
+INSERT INTO tb_account (holder_id, balance, creationdate) VALUES (1, 9820.00, '2021-06-21');
+INSERT INTO tb_account (holder_id, balance, creationdate) VALUES (4, 125.00, '2024-02-10');
+INSERT INTO tb_account (holder_id, balance, creationdate) VALUES (2, 450.25, '2023-09-05');
+INSERT INTO tb_account (holder_id, balance, creationdate) VALUES (6, 5000.00, '2020-12-01');
+INSERT INTO tb_account (holder_id, balance, creationdate) VALUES (7, 742.30, '2023-04-18');
+INSERT INTO tb_account (holder_id, balance, creationdate) VALUES (5, 85.75, '2024-01-25');
+INSERT INTO tb_account (holder_id, balance, creationdate) VALUES (9, 3210.90, '2022-07-14');
+INSERT INTO tb_account (holder_id, balance, creationdate) VALUES (1, 110.00, '2023-10-30'); 
 
--- dados de exemplo tb_accountmovement
+
+ 

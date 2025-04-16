@@ -20,6 +20,7 @@ import pt.arnaldocanelas.projetoapi.controllers.exceptions.ResourceNotFoundExcep
 import pt.arnaldocanelas.projetoapi.dto.AccountDTO;
 import pt.arnaldocanelas.projetoapi.dto.AccountMinDTO;
 import pt.arnaldocanelas.projetoapi.entities.Account;
+import pt.arnaldocanelas.projetoapi.entities.User;
 import pt.arnaldocanelas.projetoapi.entities.enums.MovementType;
 import pt.arnaldocanelas.projetoapi.repositories.AccountRepository;
 
@@ -28,6 +29,9 @@ public class AccountService<T> {
 
 	@Autowired
 	private AccountRepository repository;
+	
+	@Autowired
+	private UserService<?> userService;
 	
 	private List<Account> accounts;
 
@@ -85,6 +89,27 @@ public class AccountService<T> {
 		entity = repository.save(entity);
 			
 		return new AccountDTO(entity);
+	}
+	
+	
+	
+	@Transactional
+	public AccountMinDTO auto() {
+		
+		Account entity = new Account(); 
+		
+		User loggedInUser = userService.getLoggedInUser();
+		
+		entity.setHolder(loggedInUser);
+				
+		ZoneId fusoHorario = ZoneId.systemDefault(); // ou por exemplo: ZoneId.of("Europe/Lisbon")
+        LocalDate dataAtual = Instant.now().atZone(fusoHorario).toLocalDate();
+		
+		entity.setCreationDate(dataAtual);
+		
+		entity = repository.save(entity);
+			
+		return new AccountMinDTO(entity);
 	}
 	
 	@Transactional
