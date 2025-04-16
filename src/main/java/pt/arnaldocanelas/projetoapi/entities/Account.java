@@ -35,6 +35,10 @@ public class Account implements Serializable {
 	@Column(name="creationdate")
 	private LocalDate creationDate;
 	
+	@JsonIgnore  // Ignora a coleção de accounts durante a serialização
+	@OneToMany(mappedBy = "destinationAccount", fetch = FetchType.LAZY)
+	private List<Deposit> deposits = new ArrayList<>();
+	
 	public Account() {
 		balance = 0.0;
 	}
@@ -78,8 +82,8 @@ public class Account implements Serializable {
 		this.creationDate = creationDate;
 	}
 	
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	public List<Deposit> getDeposits() {
+		return deposits;
 	}
 
 	@Override

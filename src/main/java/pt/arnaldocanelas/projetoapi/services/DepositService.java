@@ -1,4 +1,5 @@
 package pt.arnaldocanelas.projetoapi.services;
+import java.time.Instant;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,19 +14,23 @@ import jakarta.persistence.EntityNotFoundException;
 import pt.arnaldocanelas.projetoapi.controllers.exceptions.DatabaseException;
 import pt.arnaldocanelas.projetoapi.controllers.exceptions.ResourceNotFoundException;
 import pt.arnaldocanelas.projetoapi.dto.DepositDTO;
+import pt.arnaldocanelas.projetoapi.entities.Account;
 import pt.arnaldocanelas.projetoapi.entities.Deposit;
+import pt.arnaldocanelas.projetoapi.repositories.AccountRepository;
 import pt.arnaldocanelas.projetoapi.repositories.DepositRepository;
 	
 @Service
 public class DepositService<T> {
 
 	@Autowired
-	private DepositRepository repository;
-
+	private DepositRepository depositRepository;
+	
+	@Autowired
+	private AccountRepository accountRepository;
 	
 	@Transactional(readOnly = true)
 	public DepositDTO findById(Long id) {
-		Optional<Deposit> result = repository.findById(id);
+		Optional<Deposit> result = depositRepository.findById(id);
 		Deposit entity = result.orElseThrow(
 				()-> new ResourceNotFoundException("Resource " + id + " not found."));
 		
@@ -36,7 +41,7 @@ public class DepositService<T> {
 	@Transactional(readOnly = true)
 	public Page<DepositDTO> findAll(Pageable pageable) {
 		
-		Page<Deposit> result = repository.findAll(pageable);
+		Page<Deposit> result = depositRepository.findAll(pageable);
 		
 		//with lambda expression
 		return result.map(x -> new DepositDTO(x));
@@ -45,13 +50,19 @@ public class DepositService<T> {
 	@Transactional
 	public DepositDTO insert(DepositDTO dto) {
 		
-		Deposit entity = new Deposit(); 
+		Long destinationAccountID = dto.getDestinationAccount().getId();
 		
-		copyDtoToEntity(dto, entity);
-		
-		entity = repository.save(entity);
-		
-		return new DepositDTO(entity);
+		if(!accountRepository.existsById(destinationAccountID)) 
+		{
+			throw new ResourceNotFoundException("Resource " + destinationAccountID + " not found.");
+		}
+		else 
+		{
+			Deposit entity = new Deposit(); 
+			copyDtoToEntity(dto, entity);
+			entity = depositRepository.save(entity);
+			return new DepositDTO(entity);
+		}
 	}
 	
 	@Transactional
@@ -59,11 +70,11 @@ public class DepositService<T> {
 		try 
 		{
 			//does not go to the database; object monitored by JPA
-			Deposit entity = repository.getReferenceById(id); 
+			Deposit entity = depositRepository.getReferenceById(id); 
 			
 			copyDtoToEntity(dto, entity);
 					
-			entity = repository.save(entity);
+			entity = depositRepository.save(entity);
 			
 			return new DepositDTO(entity);
 		}catch(EntityNotFoundException e) {
@@ -74,13 +85,13 @@ public class DepositService<T> {
 	
 	@Transactional(propagation = Propagation.SUPPORTS)
 	public void deleteById(Long id) {
-		if(!repository.existsById(id)) 
+		if(!depositRepository.existsById(id)) 
 		{
 			throw new ResourceNotFoundException("Resource " + id + " not found.");
 		}
 		try 
 		{
-			repository.deleteById(id);
+			depositRepository.deleteById(id);
 		}
 		catch (DataIntegrityViolationException e) 
 		{
@@ -89,15 +100,16 @@ public class DepositService<T> {
 	}
 	
 	private void copyDtoToEntity(DepositDTO dto, Deposit entity) {
-	    entity.setMoment(dto.getMoment());
-	    entity.setAmount(dto.getAmount());
-	    entity.setDescription(dto.getDescription());
-	    entity.setOriginAccountNumber(dto.getOriginAccountNumber());
-	    entity.setDestinationAccountNumber(dto.getDestinationAccountNumber());
-	    entity.setDestinationBank(dto.getDestinationBank());
-	    entity.setDestinationAccountHolderName(dto.getDestinationAccountHolderName());
-	    entity.setDestinationAccountHolderNif(dto.getDestinationAccountHolderNif());
+		entity.setId(dto.getId());
+		entity.setAmount(dto.getAmount());
+		entity.setMoment(Instant.now());
+		entity.setDescription(dto.getDescription());
+		entity.setOriginBank(dto.getOriginBank());
+		entity.setOriginAccountHolderName(dto.getOriginAccountHolderName());
+		entity.setOriginAccountHolderNif(dto.getOriginAccountHolderNif());
+		entity.setOriginAccountNumber(dto.getOriginAccountNumber());
+		Account account = accountRepository.getReferenceById(dto.getDestinationAccount().getId());
+		entity.setDestinationAccount(account);
 	}
-
 		
 }

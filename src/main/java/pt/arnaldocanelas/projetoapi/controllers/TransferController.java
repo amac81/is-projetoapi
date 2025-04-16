@@ -14,7 +14,7 @@ import pt.arnaldocanelas.projetoapi.entities.Transfer;
 import pt.arnaldocanelas.projetoapi.repositories.TransferRepository;
 
 @RestController
-@RequestMapping(value = "/movements/deposits")
+@RequestMapping(value = "/movements/transfers")
 public class TransferController {
 
     private final TransferRepository repository;

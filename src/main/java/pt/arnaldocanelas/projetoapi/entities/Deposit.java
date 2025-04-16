@@ -3,52 +3,75 @@ package pt.arnaldocanelas.projetoapi.entities;
 import java.time.Instant;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "deposit")
 public class Deposit extends AccountMovement {
 	private static final long serialVersionUID = 1L;
+	private String originBank;
+	private String originAccountHolderName;	
+	private String originAccountHolderNif;
+	private Long originAccountNumber;
 	
-	private String destinationBank;
-	private String destinationAccountHolderName;	
-	private String destinationAccountHolderNif;
-	
+	@ManyToOne
+	@JoinColumn(name = "destination_account_number")
+	private Account destinationAccount;
+		
 	public Deposit() {
 	    super();
 	}
 	
-	public Deposit(Long id, Instant moment, double amount, String description, Long originAccountNumber,
-			Long destinationAccountNumber, String destinationBank, String destinationAccountHolderName,
-			String destinationAccountHolderNif) {
-		super(id, moment, amount, description, originAccountNumber, destinationAccountNumber);
-		this.destinationBank = destinationBank;
-		this.destinationAccountHolderName = destinationAccountHolderName;
-		this.destinationAccountHolderNif = destinationAccountHolderNif;
+	public Deposit(Long id, Instant moment, double amount, String description, String originBank, String originAccountHolderName, String originAccountHolderNif,
+			Long originAccountNumber, Account destinationAccount) {
+		super(id, moment, amount, description);
+		this.originBank = originBank;
+		this.originAccountHolderName = originAccountHolderName;
+		this.originAccountHolderNif = originAccountHolderNif;
+		this.originAccountNumber = originAccountNumber;
+		this.destinationAccount = destinationAccount;
 	}
 
-	public String getDestinationBank() {
-		return destinationBank;
+	public String getOriginBank() {
+		return originBank;
 	}
 
-	public void setDestinationBank(String destinationBank) {
-		this.destinationBank = destinationBank;
+	public void setOriginBank(String originBank) {
+		this.originBank = originBank;
 	}
 
-	public String getDestinationAccountHolderName() {
-		return destinationAccountHolderName;
+	public String getOriginAccountHolderName() {
+		return originAccountHolderName;
 	}
 
-	public void setDestinationAccountHolderName(String destinationAccountHolderName) {
-		this.destinationAccountHolderName = destinationAccountHolderName;
+	public void setOriginAccountHolderName(String originAccountHolderName) {
+		this.originAccountHolderName = originAccountHolderName;
 	}
 
-	public String getDestinationAccountHolderNif() {
-		return destinationAccountHolderNif;
+	public String getOriginAccountHolderNif() {
+		return originAccountHolderNif;
 	}
 
-	public void setDestinationAccountHolderNif(String destinationAccountHolderNif) {
-		this.destinationAccountHolderNif = destinationAccountHolderNif;
+	public void setOriginAccountHolderNif(String originAccountHolderNif) {
+		this.originAccountHolderNif = originAccountHolderNif;
+	}
+
+	public Long getOriginAccountNumber() {
+		return originAccountNumber;
+	}
+
+	public void setOriginAccountNumber(Long originAccountNumber) {
+		this.originAccountNumber = originAccountNumber;
+	}
+
+	public Account getDestinationAccount() {
+		return destinationAccount;
+	}
+
+	public void setDestinationAccount(Account destinationAccount) {
+		this.destinationAccount = destinationAccount;
 	}
 
 	@Override

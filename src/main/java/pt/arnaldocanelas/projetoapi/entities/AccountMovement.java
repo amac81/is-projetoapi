@@ -18,26 +18,21 @@ public abstract class AccountMovement implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private  Long id;
+	private Long id;
 	
 	protected Instant moment;
     protected double amount;
     protected String description;
-    protected Long originAccountNumber;
-    protected Long destinationAccountNumber;
 
 	public AccountMovement() {
 	}
 
-	public AccountMovement(Long id, Instant moment, double amount, String description, Long originAccountNumber,
-			Long destinationAccountNumber) {
+	public AccountMovement(Long id, Instant moment, double amount, String description) {
 		super();
 		this.id = id;
 		this.moment = moment;
 		this.amount = amount;
 		this.description = description;
-		this.originAccountNumber = originAccountNumber;
-		this.destinationAccountNumber = destinationAccountNumber;
 	}
 
 	public Long getId() {
@@ -70,22 +65,6 @@ public abstract class AccountMovement implements Serializable{
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public Long getOriginAccountNumber() {
-		return originAccountNumber;
-	}
-
-	public void setOriginAccountNumber(Long originAccountNumber) {
-		this.originAccountNumber = originAccountNumber;
-	}
-
-	public Long getDestinationAccountNumber() {
-		return destinationAccountNumber;
-	}
-
-	public void setDestinationAccountNumber(Long destinationAccountNumber) {
-		this.destinationAccountNumber = destinationAccountNumber;
 	}
 
 	// Método abstrato que será implementado por cada tipo de movimento

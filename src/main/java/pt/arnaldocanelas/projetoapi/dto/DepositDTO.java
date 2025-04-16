@@ -1,120 +1,122 @@
 package pt.arnaldocanelas.projetoapi.dto;
 
-import pt.arnaldocanelas.projetoapi.entities.Deposit;
-
 import java.time.Instant;
 
+import pt.arnaldocanelas.projetoapi.entities.Account;
+import pt.arnaldocanelas.projetoapi.entities.Deposit;
+
 public class DepositDTO {
+	private Long id;
+	private Instant moment;
+	private Double amount;
+	private String description;
+	private String originBank;
+	private String originAccountHolderName;	
+	private String originAccountHolderNif;
+	private Long originAccountNumber;
+	private AccountIdDTO destinationAccount;
+		
+	public DepositDTO() {
+	    super();
+	}
+	
+	public DepositDTO(Long id, Instant moment, double amount, String description, String originBank, String originAccountHolderName, String originAccountHolderNif,
+			Long originAccountNumber, Account destinationAccount) {
+		super();
+		
+		this.id = id;
+		this.amount = amount;
+		this.moment = moment;
+		this.description = description;		
+		this.originBank = originBank;
+		this.originAccountHolderName = originAccountHolderName;
+		this.originAccountHolderNif = originAccountHolderNif;
+		this.originAccountNumber = originAccountNumber;
+		this.destinationAccount = new AccountIdDTO(destinationAccount);
+	}
+	
+	public DepositDTO(Deposit entity) {
+		this.id = entity.getId();
+		this.moment = entity.getMoment();
+		this.amount = entity.getAmount();
+		this.description = entity.getDescription();		
+		this.originBank = entity.getOriginBank();
+		this.originAccountHolderName = entity.getOriginAccountHolderName();
+		this.originAccountHolderNif = entity.getOriginAccountHolderNif();
+		this.originAccountNumber = entity.getOriginAccountNumber();
+		this.destinationAccount = new AccountIdDTO(entity.getDestinationAccount());
+	}
 
-    private Long id;
-    private Instant moment;
-    private double amount;
-    private String description;
-    private Long originAccountNumber;
-    private Long destinationAccountNumber;
-    private String destinationBank;
-    private String destinationAccountHolderName;
-    private String destinationAccountHolderNif;
+	public Long getId() {
+		return id;
+	}
 
-    public DepositDTO() {}
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public DepositDTO(Long id, Instant moment, double amount, String description,
-                      Long originAccountNumber, Long destinationAccountNumber,
-                      String destinationBank, String destinationAccountHolderName,
-                      String destinationAccountHolderNif) {
-        this.id = id;
-        this.moment = moment;
-        this.amount = amount;
-        this.description = description;
-        this.originAccountNumber = originAccountNumber;
-        this.destinationAccountNumber = destinationAccountNumber;
-        this.destinationBank = destinationBank;
-        this.destinationAccountHolderName = destinationAccountHolderName;
-        this.destinationAccountHolderNif = destinationAccountHolderNif;
-    }
+	public Instant getMoment() {
+		return moment;
+	}
 
-    public DepositDTO(Deposit entity) {
-        this.id = entity.getId();
-        this.moment = entity.getMoment();
-        this.amount = entity.getAmount();
-        this.description = entity.getDescription();
-        this.originAccountNumber = entity.getOriginAccountNumber();
-        this.destinationAccountNumber = entity.getDestinationAccountNumber();
-        this.destinationBank = entity.getDestinationBank();
-        this.destinationAccountHolderName = entity.getDestinationAccountHolderName();
-        this.destinationAccountHolderNif = entity.getDestinationAccountHolderNif();
-    }
-    
+	public void setMoment(Instant moment) {
+		this.moment = moment;
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public Double getAmount() {
+		return amount;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setAmount(Double amount) {
+		this.amount = amount;
+	}
 
-    public Instant getMoment() {
-        return moment;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public void setMoment(Instant moment) {
-        this.moment = moment;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public double getAmount() {
-        return amount;
-    }
+	public String getOriginBank() {
+		return originBank;
+	}
 
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
+	public void setOriginBank(String originBank) {
+		this.originBank = originBank;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public String getOriginAccountHolderName() {
+		return originAccountHolderName;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public void setOriginAccountHolderName(String originAccountHolderName) {
+		this.originAccountHolderName = originAccountHolderName;
+	}
 
-    public Long getOriginAccountNumber() {
-        return originAccountNumber;
-    }
+	public String getOriginAccountHolderNif() {
+		return originAccountHolderNif;
+	}
 
-    public void setOriginAccountNumber(Long originAccountNumber) {
-        this.originAccountNumber = originAccountNumber;
-    }
+	public void setOriginAccountHolderNif(String originAccountHolderNif) {
+		this.originAccountHolderNif = originAccountHolderNif;
+	}
 
-    public Long getDestinationAccountNumber() {
-        return destinationAccountNumber;
-    }
+	public Long getOriginAccountNumber() {
+		return originAccountNumber;
+	}
 
-    public void setDestinationAccountNumber(Long destinationAccountNumber) {
-        this.destinationAccountNumber = destinationAccountNumber;
-    }
+	public void setOriginAccountNumber(Long originAccountNumber) {
+		this.originAccountNumber = originAccountNumber;
+	}
 
-    public String getDestinationBank() {
-        return destinationBank;
-    }
+	public AccountIdDTO getDestinationAccount() {
+		return destinationAccount;
+	}
 
-    public void setDestinationBank(String destinationBank) {
-        this.destinationBank = destinationBank;
-    }
-
-    public String getDestinationAccountHolderName() {
-        return destinationAccountHolderName;
-    }
-
-    public void setDestinationAccountHolderName(String destinationAccountHolderName) {
-        this.destinationAccountHolderName = destinationAccountHolderName;
-    }
-
-    public String getDestinationAccountHolderNif() {
-        return destinationAccountHolderNif;
-    }
-
-    public void setDestinationAccountHolderNif(String destinationAccountHolderNif) {
-    }
-    
+	public void setDestinationAccount(Account destinationAccount) {
+		this.destinationAccount = new AccountIdDTO(destinationAccount) ;
+	}
+	
 }
