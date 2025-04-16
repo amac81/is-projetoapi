@@ -34,7 +34,6 @@ public class TransferService<T> {
 		Transfer entity = result.orElseThrow(
 				()-> new ResourceNotFoundException("Resource " + id + " not found."));
 		
-		
 		return new TransferDTO(entity);
 	}
 	
