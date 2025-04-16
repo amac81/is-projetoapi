@@ -1,14 +1,13 @@
 -- dados de exemplo tb_user
-INSERT INTO tb_user (name, age, nif) VALUES ('João Silva', 30, '209323223');
-INSERT INTO tb_user (name, age, nif) VALUES ('Maria Santos', 25, '209311123');
-INSERT INTO tb_user (name, age, nif) VALUES ('Carlos Ferreira', 33, '12932423');
-INSERT INTO tb_user (name, age, nif) VALUES ('Ana Costa', 22, '203211123');
-INSERT INTO tb_user (name, age, nif) VALUES ('Rui Oliveira', 35, '200222222');
-INSERT INTO tb_user (name, age, nif) VALUES ('Beatriz Matos', 28, '122233222');
-INSERT INTO tb_user (name, age, nif) VALUES ('Tiago Lopes', 31, '253334433');
-INSERT INTO tb_user (name, age, nif) VALUES ('Sofia Almeida', 24, '424242243');
-INSERT INTO tb_user (name, age, nif) VALUES ('André Rocha', 37, '122333333');
-INSERT INTO tb_user (name, age, nif) VALUES ('Cláudia Pinto', 26, '122121444');
+INSERT INTO tb_user (username, password, name, age, nif) VALUES ('joao', '$2a$10$FxIVtBa17WwEf04sN365B.1kEIPkZWJs9VC0Lpv8s8.F6gsRxMD9u', 'João Almeida', 29, '901234567');
+INSERT INTO tb_user (username, password, name, age, nif) VALUES ('carla', '$2a$10$BuCtj4aqd1zbwmBx0q4Mpu5sZASyJmtjx1IvMHjJcpiWWlrL/K9nu', 'Carla Ribeiro', 34, '912345678');
+INSERT INTO tb_user (username, password, name, age, nif) VALUES ('pedro', '$2a$10$BuCtj4aqd1zbwmBx0q4Mpu5sZASyJmtjx1IvMHjJcpiWWlrL/K9nu', 'Pedro Costa', 40, '923456789');
+INSERT INTO tb_user (username, password, name, age, nif) VALUES ('ines', '$2a$10$BuCtj4aqd1zbwmBx0q4Mpu5sZASyJmtjx1IvMHjJcpiWWlrL/K9nu', 'Inês Dias', 26, '934567890');
+INSERT INTO tb_user (username, password, name, age, nif) VALUES ('luis', '$2a$10$BuCtj4aqd1zbwmBx0q4Mpu5sZASyJmtjx1IvMHjJcpiWWlrL/K9nu', 'Luís Fernandes', 38, '945678901');
+INSERT INTO tb_user (username, password, name, age, nif) VALUES ('sofia', '$2a$10$BuCtj4aqd1zbwmBx0q4Mpu5sZASyJmtjx1IvMHjJcpiWWlrL/K9nu', 'Sofia Martins', 31, '456789012');
+INSERT INTO tb_user (username, password, name, age, nif) VALUES ('rui', '$2a$10$FxIVtBa17WwEf04sN365B.1kEIPkZWJs9VC0Lpv8s8.F6gsRxMD9u', 'Rui Gomes', 50, '567890123');
+INSERT INTO tb_user (username, password, name, age, nif) VALUES ('ana', '$2a$10$FxIVtBa17WwEf04sN365B.1kEIPkZWJs9VC0Lpv8s8.F6gsRxMD9u', 'Ana Costa', 23, '678901234');
+INSERT INTO tb_user (username, password, name, age, nif) VALUES ('carlos', '$2a$10$FxIVtBa17WwEf04sN365B.1kEIPkZWJs9VC0Lpv8s8.F6gsRxMD9u', 'Carlos Pereira', 47, '789012345');
 
 -- dados de exemplo tb_account
 INSERT INTO tb_account (accountnumber, holder_id, balance, creationdate) VALUES (1000000001, 1, 1500.50, '2023-01-15');

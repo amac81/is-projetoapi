@@ -2,8 +2,12 @@ package pt.arnaldocanelas.projetoapi.entities;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -17,13 +21,14 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name="tb_user")
-public class User implements Serializable {
+public class User implements UserDetails,Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+	private String username;
+	private String password;
 	private String name;
 	private Integer age;
 	private String nif;
@@ -34,7 +39,7 @@ public class User implements Serializable {
 
 	public User() {}
 	
-	public User(Long id, String name, Integer age, String nif) {
+	public User(Long id, String name, Integer age, String nif, String username, String password) {
 		this.id = id;
 		this.name = name;
 		this.age = age;
@@ -98,5 +103,42 @@ public class User implements Serializable {
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + ", age=" + age + ", nif=" + nif + ", accounts=" + accounts + "]";
 	}
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 }

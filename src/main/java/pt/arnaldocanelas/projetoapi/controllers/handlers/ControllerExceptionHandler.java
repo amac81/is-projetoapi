@@ -39,6 +39,15 @@ public class ControllerExceptionHandler {
 		return ResponseEntity.status(status).body(err);
 	}
 	
+	@ExceptionHandler(SecurityException.class)
+	public ResponseEntity<CustomErrorDTO> securityException(SecurityException e, HttpServletRequest request) 
+	{
+		HttpStatus status = HttpStatus.UNAUTHORIZED;
+		CustomErrorDTO err = new CustomErrorDTO(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
+		
+		return ResponseEntity.status(status).body(err);
+	}
+	
 	@ExceptionHandler(DatabaseException.class)
 	public ResponseEntity<CustomErrorDTO> databaseViolations(DatabaseException e, HttpServletRequest request) 
 	{
