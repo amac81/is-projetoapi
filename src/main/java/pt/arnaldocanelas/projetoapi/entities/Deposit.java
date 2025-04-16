@@ -14,6 +14,10 @@ public class Deposit extends AccountMovement {
 	private String destinationAccountHolderName;	
 	private String destinationAccountHolderNif;
 	
+	public Deposit() {
+	    super();
+	}
+	
 	public Deposit(Long id, Instant moment, double amount, String description, Long originAccountNumber,
 			Long destinationAccountNumber, String destinationBank, String destinationAccountHolderName,
 			String destinationAccountHolderNif) {
@@ -27,7 +31,7 @@ public class Deposit extends AccountMovement {
 		return destinationBank;
 	}
 
-	public void setOriginBank(String destinationBank) {
+	public void setDestinationBank(String destinationBank) {
 		this.destinationBank = destinationBank;
 	}
 

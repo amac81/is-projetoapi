@@ -25,7 +25,10 @@ public abstract class AccountMovement implements Serializable{
     protected String description;
     protected Long originAccountNumber;
     protected Long destinationAccountNumber;
-  
+
+	public AccountMovement() {
+	}
+
 	public AccountMovement(Long id, Instant moment, double amount, String description, Long originAccountNumber,
 			Long destinationAccountNumber) {
 		super();

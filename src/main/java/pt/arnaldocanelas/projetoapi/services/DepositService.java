@@ -12,13 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 import jakarta.persistence.EntityNotFoundException;
 import pt.arnaldocanelas.projetoapi.controllers.exceptions.DatabaseException;
 import pt.arnaldocanelas.projetoapi.controllers.exceptions.ResourceNotFoundException;
-import pt.arnaldocanelas.projetoapi.dto.AccountDTO;
 import pt.arnaldocanelas.projetoapi.dto.DepositDTO;
-import pt.arnaldocanelas.projetoapi.dto.DepositMinDTO;
-import pt.arnaldocanelas.projetoapi.entities.Account;
 import pt.arnaldocanelas.projetoapi.entities.Deposit;
 import pt.arnaldocanelas.projetoapi.repositories.DepositRepository;
-
+	
 @Service
 public class DepositService<T> {
 
@@ -27,22 +24,22 @@ public class DepositService<T> {
 
 	
 	@Transactional(readOnly = true)
-	public DepositMinDTO findById(Long id) {
+	public DepositDTO findById(Long id) {
 		Optional<Deposit> result = repository.findById(id);
 		Deposit entity = result.orElseThrow(
-				()-> new ResourceNotFoundException("Recurso não encontrado"));
+				()-> new ResourceNotFoundException("Resource " + id + " not found."));
 		
 		
-		return new DepositMinDTO(entity);
+		return new DepositDTO(entity);
 	}
 	
 	@Transactional(readOnly = true)
-	public Page<DepositMinDTO> findAll(Pageable pageable) {
+	public Page<DepositDTO> findAll(Pageable pageable) {
 		
 		Page<Deposit> result = repository.findAll(pageable);
 		
 		//with lambda expression
-		return result.map(x -> new DepositMinDTO(x));
+		return result.map(x -> new DepositDTO(x));
 	}
 	
 	@Transactional
@@ -70,7 +67,7 @@ public class DepositService<T> {
 			
 			return new DepositDTO(entity);
 		}catch(EntityNotFoundException e) {
-			throw new ResourceNotFoundException("Recurso não encontrado");
+			throw new ResourceNotFoundException("Resource " + id + " not found.");
 		}
 	
 	}
@@ -79,7 +76,7 @@ public class DepositService<T> {
 	public void deleteById(Long id) {
 		if(!repository.existsById(id)) 
 		{
-			throw new ResourceNotFoundException("Recurso não encontrado");
+			throw new ResourceNotFoundException("Resource " + id + " not found.");
 		}
 		try 
 		{
@@ -87,19 +84,20 @@ public class DepositService<T> {
 		}
 		catch (DataIntegrityViolationException e) 
 		{
-        	throw new DatabaseException("Falha de integridade referencial");
+        	throw new DatabaseException("Referential integrity failure.");
 		}	
 	}
 	
 	private void copyDtoToEntity(DepositDTO dto, Deposit entity) {
-		entity.setName(dto.getName());
-		entity.setNif(dto.getNif());
-		entity.setAge(dto.getAge());
-		
-		for(AccountDTO accountDto : dto.getAccounts()) {		
-			Account account = accountRepository.getReferenceById(accountDto.getId());
-			entity.getAccounts().add(account);
-		};
+	    entity.setMoment(dto.getMoment());
+	    entity.setAmount(dto.getAmount());
+	    entity.setDescription(dto.getDescription());
+	    entity.setOriginAccountNumber(dto.getOriginAccountNumber());
+	    entity.setDestinationAccountNumber(dto.getDestinationAccountNumber());
+	    entity.setDestinationBank(dto.getDestinationBank());
+	    entity.setDestinationAccountHolderName(dto.getDestinationAccountHolderName());
+	    entity.setDestinationAccountHolderNif(dto.getDestinationAccountHolderNif());
 	}
+
 		
 }
