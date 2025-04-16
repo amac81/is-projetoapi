@@ -60,7 +60,7 @@ public class TransferService<T> {
 			Transfer entity = new Transfer(); 
 			copyDtoToEntity(dto, entity);
 			//update account balance
-			accountService.bankingMovement(entity.getId(), dto.getAmount(), MovementType.DEBIT);
+			accountService.bankingMovement(originAccountId, dto.getAmount(), MovementType.DEBIT);
 	
 			entity = transferRepository.save(entity);
 			return new TransferDTO(entity);

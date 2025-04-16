@@ -61,7 +61,7 @@ public class DepositService<T> {
 			copyDtoToEntity(dto, entity);
 			
 			//update account balance
-			accountService.bankingMovement(entity.getId(), dto.getAmount(), MovementType.CREDIT);
+			accountService.bankingMovement(destinationAccountID, dto.getAmount(), MovementType.CREDIT);
 			
 			entity = depositRepository.save(entity);
 			return new DepositDTO(entity);

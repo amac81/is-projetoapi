@@ -127,21 +127,6 @@ public class AccountService<T> {
 		}	
 	}
 	
-	/**
-	 * Search for an account by accountNumber (Id).
-	 * 
-	 * @param accountNumber (Id) of the account to be searched
-	 * @return the searched account or null if not found
-	 */
-	public Account searchAccount(Long accountNumber) {
-
-		for (Account account : accounts) {
-			if (account.getId() == accountNumber)
-				return account;
-		}
-		return null;
-	}
-	
 	
 	/**
 	 * Transfers a certain amount from an Origin account to a Destination account.
@@ -149,33 +134,27 @@ public class AccountService<T> {
 	 *
 	 * @param value of the movement
 	 * @param accountID account that will have the balance changed
-	 * @return true, if the movement was successful.
 	 * @throws BussinessException
 	 */
-	public boolean bankingMovement(Long accountID, double value, MovementType type) throws BussinessException {
+	public void bankingMovement(Long accountID, double value, MovementType type) throws BussinessException {
 
-		boolean success = false;
-
-		Account account = searchAccount(accountID);
-
+		Account account = repository.getReferenceById(accountID);
+		
 		if(type == MovementType.DEBIT) 
 		{
 			if (account.getBalance() >= value) {
 				account.setBalance(account.getBalance() - value);
-				success = true;
 			} else {
-				throw new BussinessException("Insufficient funds in the origin account!");
+				throw new BussinessException("Insufficient funds in the origin account.");
 			}
 		}else {
 			if (value > 0) {
 				account.setBalance(account.getBalance() + value);
-				success = true;
 			} else {
-				throw new BussinessException("Invalid deposit amount!");
+				throw new BussinessException("Invalid deposit amount.");
 			}		
 		}
 
-		return success;
 	}
 	
 		
