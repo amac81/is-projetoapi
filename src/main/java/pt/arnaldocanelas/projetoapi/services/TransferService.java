@@ -9,42 +9,42 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import pt.arnaldocanelas.projetoapi.controllers.exceptions.ResourceNotFoundException;
-import pt.arnaldocanelas.projetoapi.dto.DepositDTO;
+import pt.arnaldocanelas.projetoapi.dto.TransferDTO;
 import pt.arnaldocanelas.projetoapi.entities.Account;
-import pt.arnaldocanelas.projetoapi.entities.Deposit;
+import pt.arnaldocanelas.projetoapi.entities.Transfer;
 import pt.arnaldocanelas.projetoapi.repositories.AccountRepository;
-import pt.arnaldocanelas.projetoapi.repositories.DepositRepository;
+import pt.arnaldocanelas.projetoapi.repositories.TransferRepository;
 	
 @Service
-public class DepositService<T> {
+public class TransferService<T> {
 
 	@Autowired
-	private DepositRepository depositRepository;
+	private TransferRepository transferRepository;
 	
 	@Autowired
 	private AccountRepository accountRepository;
 	
 	@Transactional(readOnly = true)
-	public DepositDTO findById(Long id) {
-		Optional<Deposit> result = depositRepository.findById(id);
-		Deposit entity = result.orElseThrow(
+	public TransferDTO findById(Long id) {
+		Optional<Transfer> result = transferRepository.findById(id);
+		Transfer entity = result.orElseThrow(
 				()-> new ResourceNotFoundException("Resource " + id + " not found."));
 		
 		
-		return new DepositDTO(entity);
+		return new TransferDTO(entity);
 	}
 	
 	@Transactional(readOnly = true)
-	public Page<DepositDTO> findAll(Pageable pageable) {
+	public Page<TransferDTO> findAll(Pageable pageable) {
 		
-		Page<Deposit> result = depositRepository.findAll(pageable);
+		Page<Transfer> result = transferRepository.findAll(pageable);
 		
 		//with lambda expression
-		return result.map(x -> new DepositDTO(x));
+		return result.map(x -> new TransferDTO(x));
 	}
 	
 	@Transactional
-	public DepositDTO insert(DepositDTO dto) {
+	public TransferDTO insert(TransferDTO dto) {
 		
 		Long destinationAccountID = dto.getDestinationAccount().getId();
 		
@@ -54,14 +54,14 @@ public class DepositService<T> {
 		}
 		else 
 		{
-			Deposit entity = new Deposit(); 
+			Transfer entity = new Transfer(); 
 			copyDtoToEntity(dto, entity);
-			entity = depositRepository.save(entity);
-			return new DepositDTO(entity);
+			entity = transferRepository.save(entity);
+			return new TransferDTO(entity);
 		}
 	}
 
-	private void copyDtoToEntity(DepositDTO dto, Deposit entity) {
+	private void copyDtoToEntity(TransferDTO dto, Transfer entity) {
 		entity.setId(dto.getId());
 		entity.setAmount(dto.getAmount());
 		entity.setMoment(Instant.now());

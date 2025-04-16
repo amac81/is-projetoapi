@@ -39,6 +39,10 @@ public class Account implements Serializable {
 	@OneToMany(mappedBy = "destinationAccount", fetch = FetchType.LAZY)
 	private List<Deposit> deposits = new ArrayList<>();
 	
+	@JsonIgnore  // Ignora a coleção de accounts durante a serialização
+	@OneToMany(mappedBy = "originAccount", fetch = FetchType.LAZY)
+	private List<Transfer> transfers = new ArrayList<>();
+	
 	public Account() {
 		balance = 0.0;
 	}

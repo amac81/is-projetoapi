@@ -76,8 +76,7 @@ public class Deposit extends AccountMovement {
 
 	@Override
     public void execute() {
-        System.out.println("Depósito de " + amount + " executado.");
-        // Aqui podes adicionar lógica para atualizar saldo de uma conta, por exemplo
+        //TODO add ammount to account
     }
 	
 	
