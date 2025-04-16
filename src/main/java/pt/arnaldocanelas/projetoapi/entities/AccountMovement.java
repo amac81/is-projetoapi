@@ -66,7 +66,4 @@ public abstract class AccountMovement implements Serializable{
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
-	// Método abstrato que será implementado por cada tipo de movimento
-    public abstract void execute();
 }

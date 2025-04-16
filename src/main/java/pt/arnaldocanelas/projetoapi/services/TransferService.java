@@ -12,6 +12,7 @@ import pt.arnaldocanelas.projetoapi.controllers.exceptions.ResourceNotFoundExcep
 import pt.arnaldocanelas.projetoapi.dto.TransferDTO;
 import pt.arnaldocanelas.projetoapi.entities.Account;
 import pt.arnaldocanelas.projetoapi.entities.Transfer;
+import pt.arnaldocanelas.projetoapi.entities.enums.MovementType;
 import pt.arnaldocanelas.projetoapi.repositories.AccountRepository;
 import pt.arnaldocanelas.projetoapi.repositories.TransferRepository;
 	
@@ -23,6 +24,9 @@ public class TransferService<T> {
 	
 	@Autowired
 	private AccountRepository accountRepository;
+	
+	@Autowired
+	private AccountService<?> accountService;
 	
 	@Transactional(readOnly = true)
 	public TransferDTO findById(Long id) {
@@ -56,6 +60,9 @@ public class TransferService<T> {
 		{
 			Transfer entity = new Transfer(); 
 			copyDtoToEntity(dto, entity);
+			//update account balance
+			accountService.bankingMovement(entity.getId(), dto.getAmount(), MovementType.DEBIT);
+	
 			entity = transferRepository.save(entity);
 			return new TransferDTO(entity);
 		}

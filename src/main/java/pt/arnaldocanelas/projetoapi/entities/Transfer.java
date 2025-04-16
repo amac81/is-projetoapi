@@ -74,12 +74,5 @@ public class Transfer extends AccountMovement {
 	public void setOriginAccount(Account originAccount) {
 		this.originAccount = originAccount;
 	}
-
-	@Override
-	public void execute() {
-		// TODO decrease, if possible amount at account
-		
-	}
-	
 	
 }

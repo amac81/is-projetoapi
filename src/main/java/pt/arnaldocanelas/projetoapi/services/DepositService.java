@@ -12,6 +12,7 @@ import pt.arnaldocanelas.projetoapi.controllers.exceptions.ResourceNotFoundExcep
 import pt.arnaldocanelas.projetoapi.dto.DepositDTO;
 import pt.arnaldocanelas.projetoapi.entities.Account;
 import pt.arnaldocanelas.projetoapi.entities.Deposit;
+import pt.arnaldocanelas.projetoapi.entities.enums.MovementType;
 import pt.arnaldocanelas.projetoapi.repositories.AccountRepository;
 import pt.arnaldocanelas.projetoapi.repositories.DepositRepository;
 	
@@ -24,13 +25,15 @@ public class DepositService<T> {
 	@Autowired
 	private AccountRepository accountRepository;
 	
+	@Autowired
+	private AccountService<?> accountService;
+	
 	@Transactional(readOnly = true)
 	public DepositDTO findById(Long id) {
 		Optional<Deposit> result = depositRepository.findById(id);
 		Deposit entity = result.orElseThrow(
 				()-> new ResourceNotFoundException("Resource " + id + " not found."));
-		
-		
+
 		return new DepositDTO(entity);
 	}
 	
@@ -56,6 +59,10 @@ public class DepositService<T> {
 		{
 			Deposit entity = new Deposit(); 
 			copyDtoToEntity(dto, entity);
+			
+			//update account balance
+			accountService.bankingMovement(entity.getId(), dto.getAmount(), MovementType.CREDIT);
+			
 			entity = depositRepository.save(entity);
 			return new DepositDTO(entity);
 		}

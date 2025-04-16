@@ -14,11 +14,13 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityNotFoundException;
+import pt.arnaldocanelas.projetoapi.controllers.exceptions.BussinessException;
 import pt.arnaldocanelas.projetoapi.controllers.exceptions.DatabaseException;
 import pt.arnaldocanelas.projetoapi.controllers.exceptions.ResourceNotFoundException;
 import pt.arnaldocanelas.projetoapi.dto.AccountDTO;
 import pt.arnaldocanelas.projetoapi.dto.AccountMinDTO;
 import pt.arnaldocanelas.projetoapi.entities.Account;
+import pt.arnaldocanelas.projetoapi.entities.enums.MovementType;
 import pt.arnaldocanelas.projetoapi.repositories.AccountRepository;
 
 @Service
@@ -139,5 +141,42 @@ public class AccountService<T> {
 		}
 		return null;
 	}
+	
+	
+	/**
+	 * Transfers a certain amount from an Origin account to a Destination account.
+	 * If there is not enough balance, the amount will not be transferred.
+	 *
+	 * @param value of the movement
+	 * @param accountID account that will have the balance changed
+	 * @return true, if the movement was successful.
+	 * @throws BussinessException
+	 */
+	public boolean bankingMovement(Long accountID, double value, MovementType type) throws BussinessException {
+
+		boolean success = false;
+
+		Account account = searchAccount(accountID);
+
+		if(type == MovementType.DEBIT) 
+		{
+			if (account.getBalance() >= value) {
+				account.setBalance(account.getBalance() - value);
+				success = true;
+			} else {
+				throw new BussinessException("Insufficient funds in the origin account!");
+			}
+		}else {
+			if (value > 0) {
+				account.setBalance(account.getBalance() + value);
+				success = true;
+			} else {
+				throw new BussinessException("Invalid deposit amount!");
+			}		
+		}
+
+		return success;
+	}
+	
 		
 }

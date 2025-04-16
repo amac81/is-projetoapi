@@ -74,8 +74,8 @@ public class Account implements Serializable {
 		return balance;
 	}
 	
-	public void setBalance(Double balance) {
-		this.balance = balance;
+	public void setBalance(Double value) {
+		balance = value;
 	}
 
 	public LocalDate getCreationDate() {

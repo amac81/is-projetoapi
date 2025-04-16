@@ -74,11 +74,4 @@ public class Deposit extends AccountMovement {
 		this.destinationAccount = destinationAccount;
 	}
 
-	@Override
-    public void execute() {
-        //TODO add ammount to account
-    }
-	
-	
-	
 }
