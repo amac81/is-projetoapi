@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityNotFoundException;
+import pt.arnaldocanelas.projetoapi.controllers.exceptions.AccountMovementException;
 import pt.arnaldocanelas.projetoapi.controllers.exceptions.BussinessException;
 import pt.arnaldocanelas.projetoapi.controllers.exceptions.DatabaseException;
 import pt.arnaldocanelas.projetoapi.controllers.exceptions.ResourceNotFoundException;
@@ -170,7 +171,7 @@ public class AccountService<T> {
 			if (account.getBalance() >= value) {
 				account.setBalance(account.getBalance() - value);
 			} else {
-				throw new BussinessException("Insufficient funds in the origin account.");
+				throw new AccountMovementException("Insufficient funds in the origin account.");
 			}
 		}else {
 			if (value > 0) {

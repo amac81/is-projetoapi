@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import jakarta.servlet.http.HttpServletRequest;
+import pt.arnaldocanelas.projetoapi.controllers.exceptions.AccountMovementException;
 import pt.arnaldocanelas.projetoapi.controllers.exceptions.BussinessException;
 import pt.arnaldocanelas.projetoapi.controllers.exceptions.DatabaseException;
 import pt.arnaldocanelas.projetoapi.controllers.exceptions.ResourceNotFoundException;
@@ -34,6 +35,15 @@ public class ControllerExceptionHandler {
 	public ResponseEntity<CustomErrorDTO> bussinessLogic(BussinessException e, HttpServletRequest request) 
 	{
 		HttpStatus status = HttpStatus.BAD_REQUEST;
+		CustomErrorDTO err = new CustomErrorDTO(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
+		
+		return ResponseEntity.status(status).body(err);
+	}
+	
+	@ExceptionHandler(AccountMovementException.class)
+	public ResponseEntity<CustomErrorDTO> accountMovement(AccountMovementException e, HttpServletRequest request) 
+	{
+		HttpStatus status = HttpStatus.UNAUTHORIZED;
 		CustomErrorDTO err = new CustomErrorDTO(Instant.now(), status.value(), e.getMessage(), request.getRequestURI());
 		
 		return ResponseEntity.status(status).body(err);
