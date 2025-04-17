@@ -53,15 +53,18 @@ public class UserService<T> {
 	}
 	
 	@Transactional
-	public UserDTO insert(UserDTO dto) {
+	public UserMinDTO insert(UserMinDTO dto) {
 		
 		User entity = new User(); 
 		
-		copyDtoToEntity(dto, entity);
+		entity.setName(dto.getName());
+		entity.setNif(dto.getNif());
+		entity.setAge(dto.getAge());
+		entity.setUsername(dto.getUsername());
 		
 		entity = userRepository.save(entity);
 		
-		return new UserDTO(entity);
+		return new UserMinDTO(entity);
 	}
 	
 	@Transactional
@@ -102,6 +105,7 @@ public class UserService<T> {
 		entity.setName(dto.getName());
 		entity.setNif(dto.getNif());
 		entity.setAge(dto.getAge());
+		entity.setUsername(dto.getUsername());
 		
 		for(AccountDTO accountDto : dto.getAccounts()) {		
 			Account account = accountRepository.getReferenceById(accountDto.getId());

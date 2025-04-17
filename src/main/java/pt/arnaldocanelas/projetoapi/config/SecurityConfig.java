@@ -14,7 +14,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import pt.arnaldocanelas.projetoapi.security.JwtFilter;
-import pt.arnaldocanelas.projetoapi.services.JwtBlacklistService;
 
 @Configuration
 @EnableMethodSecurity
@@ -58,9 +57,5 @@ public class SecurityConfig {
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    
-    @Bean
-    JwtBlacklistService JwtBlacklistService() {
-        return new JwtBlacklistService();
-    }
+
 }

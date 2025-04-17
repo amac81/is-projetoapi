@@ -44,7 +44,7 @@ public class UserController {
 	
 	
 	@PostMapping
-	public ResponseEntity<UserDTO> insert(@Valid @RequestBody UserDTO dto) {
+	public ResponseEntity<UserMinDTO> insert(@Valid @RequestBody UserMinDTO dto) {
 		
 		dto = service.insert(dto); 
 		

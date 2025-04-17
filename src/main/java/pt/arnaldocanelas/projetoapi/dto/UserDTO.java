@@ -17,16 +17,18 @@ public class UserDTO {
     @Positive(message = "Idade tem de ser um valor positivo")
     private Integer age;
     private String nif;
+    private String username;
      
     private List<AccountDTO> accounts = new ArrayList<>();
 
     public UserDTO() {}
 
-    public UserDTO(Long id, String name, Integer age, String nif) {
+    public UserDTO(Long id, String name, Integer age, String nif, String username) {
         this.id = id;
         this.name = name;
         this.age = age;
         this.nif = nif;
+        this.username = username;
     }
 
     public UserDTO(User entity) {
@@ -34,6 +36,7 @@ public class UserDTO {
         this.name = entity.getName();
         this.age = entity.getAge();
         this.nif = entity.getNif();
+        this.username = entity.getUsername();
         
         accounts = entity.getAccounts().stream().map(x->new AccountDTO(x)).collect(Collectors.toList());
     }
@@ -73,5 +76,14 @@ public class UserDTO {
 	public void setNif(String nif) {
 		this.nif = nif;
 	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	
 
  }
