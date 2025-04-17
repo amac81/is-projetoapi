@@ -1,21 +1,21 @@
 package pt.arnaldocanelas.projetoapi.dto;
 
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 public class CustomErrorDTO {
-	private Instant timestamp;
+	private LocalDateTime timestamp;
     private Integer status;
     private String error;
     private String path;
     
-    public CustomErrorDTO(Instant timestamp, Integer status, String error, String path) {
-		this.timestamp = timestamp;
+    public CustomErrorDTO(Integer status, String error, String path) {
+		this.timestamp = LocalDateTime.now();
 		this.status = status;
 		this.error = error;
 		this.path = path;
 	}
 
-	public Instant getTimestamp() {
+	public LocalDateTime getTimestamp() {
 		return timestamp;
 	}
 

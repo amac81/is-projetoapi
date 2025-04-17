@@ -9,7 +9,7 @@ public class ValidationErrorDTO extends CustomErrorDTO{
 	private List<FieldMessageDTO> errors = new ArrayList<>();
 
 	public ValidationErrorDTO(Instant timestamp, Integer status, String error, String path) {
-		super(timestamp, status, error, path);
+		super(status, error, path);
 		// TODO Auto-generated constructor stub
 	}
 

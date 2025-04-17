@@ -47,7 +47,7 @@ public class AuthController {
                 .map(user -> org.springframework.security.core.userdetails.User
                         .withUsername(user.getUsername())
                         .password(user.getPassword())
-                        .roles("USER") // ou outras roles se usares
+                        .roles("USER") // pode ir buscar a BD
                         .build())
                 .orElseThrow(() -> new SecurityException("User not found."));
 

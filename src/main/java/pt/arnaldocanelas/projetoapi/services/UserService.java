@@ -37,7 +37,7 @@ public class UserService<T> {
 	public UserMinDTO findById(Long id) {
 		Optional<User> result = userRepository.findById(id);
 		User entity = result.orElseThrow(
-				()-> new ResourceNotFoundException("Recurso não encontrado"));
+				()-> new ResourceNotFoundException("Resource not found."));
 		
 		
 		return new UserMinDTO(entity);
@@ -80,7 +80,7 @@ public class UserService<T> {
 			
 			return new UserDTO(entity);
 		}catch(EntityNotFoundException e) {
-			throw new ResourceNotFoundException("Recurso não encontrado");
+			throw new ResourceNotFoundException("Resource not found.");
 		}
 	
 	}
@@ -89,7 +89,7 @@ public class UserService<T> {
 	public void deleteById(Long id) {
 		if(!userRepository.existsById(id)) 
 		{
-			throw new ResourceNotFoundException("Recurso não encontrado");
+			throw new ResourceNotFoundException("Resource not found.");
 		}
 		try 
 		{
@@ -97,7 +97,7 @@ public class UserService<T> {
 		}
 		catch (DataIntegrityViolationException e) 
 		{
-        	throw new DatabaseException("Falha de integridade referencial");
+        	throw new DatabaseException("Referential integrity failure.");
 		}	
 	}
 	
