@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.persistence.EntityNotFoundException;
 import pt.arnaldocanelas.projetoapi.controllers.exceptions.AccountMovementException;
 import pt.arnaldocanelas.projetoapi.controllers.exceptions.BussinessException;
 import pt.arnaldocanelas.projetoapi.controllers.exceptions.DatabaseException;
@@ -113,23 +112,6 @@ public class AccountService<T> {
 		return new AccountMinDTO(entity);
 	}
 	
-	@Transactional
-	public AccountDTO update(Long id, AccountDTO dto) {
-		try 
-		{
-			//does not go to the database; object monitored by JPA
-			Account entity = repository.getReferenceById(id); 
-			
-			copyDtoToEntity(dto, entity);
-					
-			entity = repository.save(entity);
-			
-			return new AccountDTO(entity);
-		}catch(EntityNotFoundException e) {
-			throw new ResourceNotFoundException("Resource " + id + " not found.");
-		}
-	
-	}
 	
 	private void copyDtoToEntity(AccountDTO dto, Account entity) {
 		entity.setHolder(dto.getHolder());

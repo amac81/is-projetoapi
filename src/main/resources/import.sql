@@ -22,4 +22,4 @@ INSERT INTO tb_account (holder_id, balance, creationdate) VALUES (9, 3210.90, '2
 INSERT INTO tb_account (holder_id, balance, creationdate) VALUES (1, 110.00, '2023-10-30'); 
 
 
- 
+  
